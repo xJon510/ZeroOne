@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,9 +19,16 @@ public class BitManager : MonoBehaviour
     public float tickRate = 1.0f;
     private float timer;
 
+    public static event Action<float> OnBitrateChanged;
+
     public List<BitGridManager> activeGrids = new List<BitGridManager>();
 
     public float globalBitRate = 1f; // Total bits to generate per tick (float for smoother distribution)
+
+    private void Start()
+    {
+        UpdateGlobalBitRate(globalBitRate);
+    }
 
     private void Awake()
     {
@@ -43,22 +51,21 @@ public class BitManager : MonoBehaviour
 
     private void Tick()
     {
-        float bitsPerGrid = globalBitRate / activeGrids.Count;
-        float totalBits = 0f;
+        float bitRatePerGrid = globalBitRate / (activeGrids.Count - 5);
+        float totalBitRate = bitRatePerGrid * (activeGrids.Count - 5);
 
-        foreach (BitGridManager grid in activeGrids)
-        {
-            grid.ReceiveBits(bitsPerGrid);
-            totalBits += bitsPerGrid;
-        }
-
-        currentBits += (ulong)totalBits;
-
+        currentBits += (ulong)totalBitRate;
         if (currentBits > maxBits)
             currentBits = maxBits;
+    }
 
-        UnityEngine.Debug.Log($"Ticked: +{totalBits}, now at {currentBits}");
-
+    [ContextMenu("Refresh Grid Bitrates")]
+    public void RefreshGridBitrates()
+    {
+        foreach (BitGridManager grid in activeGrids)
+        {
+            grid.SetBitrateSource(() => globalBitRate / (activeGrids.Count - 5));
+        }
     }
 
     private void UpdateRunTimeText()
@@ -70,4 +77,12 @@ public class BitManager : MonoBehaviour
             runTimeText.text = $"{minutes:00}:{seconds:00}";
         }
     }
+
+    public void UpdateGlobalBitRate(float newRate)
+    {
+        globalBitRate = newRate;
+        OnBitrateChanged?.Invoke(globalBitRate);
+    }
+
+
 }
