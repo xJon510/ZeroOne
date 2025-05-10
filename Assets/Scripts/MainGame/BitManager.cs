@@ -11,7 +11,6 @@ public class BitManager : MonoBehaviour
 
     [SerializeField] public ulong currentBits = 0;
     public ulong winCondition = 83886080;
-    private ulong maxBits = ulong.MaxValue;
 
     public float runTime = 0f;
     public TMP_Text runTimeText;
@@ -40,6 +39,12 @@ public class BitManager : MonoBehaviour
         timer += Time.deltaTime;
         runTime += Time.deltaTime;
 
+        currentBits = 0;
+        foreach (BitGridManager grid in activeGrids)
+        {
+            currentBits += grid.GetLocalBitValue();
+        }
+
         if (timer >= tickRate)
         {
             timer -= tickRate;
@@ -51,12 +56,11 @@ public class BitManager : MonoBehaviour
 
     private void Tick()
     {
-        float bitRatePerGrid = globalBitRate / (activeGrids.Count - 5);
-        float totalBitRate = bitRatePerGrid * (activeGrids.Count - 5);
-
-        currentBits += (ulong)totalBitRate;
-        if (currentBits > maxBits)
-            currentBits = maxBits;
+        currentBits = 0;
+        foreach (BitGridManager grid in activeGrids)
+        {
+            currentBits += grid.GetLocalBitValue(); // You'll expose this method
+        }
     }
 
     [ContextMenu("Refresh Grid Bitrates")]
@@ -64,7 +68,7 @@ public class BitManager : MonoBehaviour
     {
         foreach (BitGridManager grid in activeGrids)
         {
-            grid.SetBitrateSource(() => globalBitRate / (activeGrids.Count - 5));
+            grid.SetBitrateSource(() => globalBitRate / activeGrids.Count);
         }
     }
 

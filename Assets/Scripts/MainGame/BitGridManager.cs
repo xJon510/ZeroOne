@@ -122,6 +122,11 @@ public class BitGridManager : MonoBehaviour
         return length;
     }
 
+    public ulong GetLocalBitValue()
+    {
+        return localBitValue;
+    }
+
     void OnEnable()
     {
         BitManager.OnBitrateChanged += HandleBitrateUpdate;
