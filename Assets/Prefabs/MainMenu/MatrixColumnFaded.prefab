@@ -93,8 +93,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e70536b5cf5d5242b7c2402266cabd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trailColor: {r: 0, g: 1, b: 0, a: 0}
-  headColor: {r: 1, g: 1, b: 1, a: 0.19607843}
+  trailColor: {r: 0.27450982, g: 0.8235295, b: 0.3529412, a: 0}
+  headColor: {r: 0.8235294, g: 1, b: 0.8235294, a: 0.19607843}
 --- !u!222 &4013016033435760444
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fallSpeed: 75
+  isBrightColumn: 0
 --- !u!1001 &500890936436550914
 PrefabInstance:
   m_ObjectHideFlags: 0
