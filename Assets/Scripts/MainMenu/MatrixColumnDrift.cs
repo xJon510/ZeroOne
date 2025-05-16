@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MatrixColumnDrift : MonoBehaviour
 {
-    public float fallSpeed = 50f; // units per second
+    public float fallSpeed = 1f; // units per second
     public bool isBrightColumn = false;
 
     private float destroyY;

@@ -7,7 +7,6 @@ public class CoCScreenMovement : MonoBehaviour
 {
     [SerializeField] private RectTransform upgradeHolder;
     [SerializeField] private RectTransform boundsRect; // This should be UpgradeBkRnd
-    [SerializeField] private float padding = 200f;
 
     public float sensitvity = 2.5f;
 
@@ -44,11 +43,11 @@ public class CoCScreenMovement : MonoBehaviour
     {
         Vector2 boundsSize = boundsRect.rect.size;
 
-        float halfX = boundsSize.x / 2f;
-        float halfY = boundsSize.y / 2f;
+        float halfX = boundsSize.x / 4f;
+        float halfY = boundsSize.y;
 
-        float clampedX = Mathf.Clamp(targetPos.x, -halfX + 10f, halfX - 10f);
-        float clampedY = Mathf.Clamp(targetPos.y, -halfY + 10f, halfY - 10f);
+        float clampedX = Mathf.Clamp(targetPos.x, -halfX, halfX);
+        float clampedY = Mathf.Clamp(targetPos.y, -halfY, halfY);
 
         return new Vector2(clampedX, clampedY);
     }
