@@ -74,7 +74,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.2
+    - _Alpha: 0.6
     - _EnableExternalAlpha: 0
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -82,10 +82,10 @@ Material:
     m_Colors:
     - _Alpha: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorOrEffect: {r: 0, g: 0.5882353, b: 0, a: 0}
+    - _ColorOrEffect: {r: 0, g: 0.8627451, b: 0, a: 0}
     - _Fade: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ScrollSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _ScrollSpeed: {r: 0, g: 0.15, b: 0, a: 0}
     - _TilingValue: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

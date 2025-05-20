@@ -88,5 +88,15 @@ public class BitManager : MonoBehaviour
         OnBitrateChanged?.Invoke(globalBitRate);
     }
 
+    public int GetActiveGridCount()
+    {
+        int count = 0;
+        foreach (BitGridManager grid in activeGrids)
+        {
+            if (!grid.IsAtGridCapacity())
+                count++;
+        }
+        return count;
+    }
 
 }

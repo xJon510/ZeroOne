@@ -167,6 +167,7 @@ public class BootManager : MonoBehaviour
 
     [Header("Post Boot")]
     public GameObject postBootObject;
+    public GameObject Bloom;
 
     private List<string> bootQueue = new List<string>();
 
@@ -230,6 +231,7 @@ public class BootManager : MonoBehaviour
         if (postBootObject != null)
         {
             postBootObject.SetActive(true);
+            Bloom.SetActive(true);
         }
     }
 

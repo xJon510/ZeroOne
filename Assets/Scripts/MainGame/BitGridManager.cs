@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BitGridManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class BitGridManager : MonoBehaviour
     private int maxCapacity => bitCharacters.Length;
 
     private ulong localBitValue = 0;
+    private ulong localBitMax;
     private float internalBitProgress = 0f; // To handle fractional bit accumulation
 
     private Coroutine bitAnimRoutine;
@@ -26,12 +28,25 @@ public class BitGridManager : MonoBehaviour
 
     public TMP_Text debugText;
 
+    private Image borderImage;
+    private TMP_Text[] bitTexts;
+
+    private static readonly Color BorderGreen = new Color32(0x00, 0xDC, 0x36, 0xFF);
+    private static readonly Color BorderRed = new Color32(0xDC, 0x1E, 0x00, 0xFF);
+
+    private static readonly Color TextGreen = new Color32(0x6D, 0xD2, 0x7A, 0xFF);
+    private static readonly Color TextRed = new Color32(0xD2, 0x73, 0x6E, 0xFF);
+
     private void Start()
     {
         // Automatically gather all TMP_Texts under this object
         bitCharacters = GetComponentsInChildren<TMP_Text>();
+        bitTexts = bitCharacters; // optional alias
+        borderImage = GetComponent<Image>();
 
         UpdateVisuals(); // Start clean
+
+        localBitMax = (ulong)Mathf.Pow(2, maxCapacity) - 1;
     }
 
     private void Update()
@@ -90,6 +105,18 @@ public class BitGridManager : MonoBehaviour
 
             yield return new WaitForSeconds(waveStaggerDelay);
         }
+
+        float fillRatio = (float)localBitValue / localBitMax;
+        float adjustedRatio = Mathf.InverseLerp(0.5f, 1f, fillRatio);
+
+        Color borderColor = Color.Lerp(BorderGreen, BorderRed, adjustedRatio); // or red-to-green
+        Color textColor = Color.Lerp(TextGreen, TextRed, adjustedRatio);     // tweak to your style
+
+        if (borderImage != null)
+            borderImage.color = borderColor;
+
+        foreach (TMP_Text txt in bitTexts)
+            txt.color = textColor;
     }
 
     private void UpdateVisuals()
@@ -145,5 +172,21 @@ public class BitGridManager : MonoBehaviour
     public void SetBitrateSource(Func<float> source)
     {
         bitrateSource = source;
+    }
+
+    public bool IsAtGridCapacity()
+    {
+        return GetBitLength(localBitValue + 1) > maxCapacity;
+    }
+
+    private int CountSetBits(ulong value)
+    {
+        int count = 0;
+        while (value != 0)
+        {
+            count += (int)(value & 1);
+            value >>= 1;
+        }
+        return count;
     }
 }

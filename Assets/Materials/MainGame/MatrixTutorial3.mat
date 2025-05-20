@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MatrixTutorial
+  m_Name: MatrixTutorial3
   m_Shader: {fileID: -6465566751694194690, guid: dafbd6c433bcf094482e7e6917ba84df, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -41,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _GradientTexture:
-        m_Texture: {fileID: 2800000, guid: e307da72e05998047a008ba14343922c, type: 3}
+        m_Texture: {fileID: 2800000, guid: df3809656a01af0469ea502315d24b66, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -82,10 +82,10 @@ Material:
     m_Colors:
     - _Alpha: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _ColorOrEffect: {r: 0, g: 0.5882353, b: 0, a: 0}
-    - _Fade: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 1}
+    - _ColorOrEffect: {r: 0, g: 0.5882353, b: 0, a: 1}
+    - _Fade: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ScrollSpeed: {r: 0, g: 0.1, b: 0, a: 0}
+    - _ScrollSpeed: {r: 0, g: 0.05, b: 0, a: 0}
     - _TilingValue: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
