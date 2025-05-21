@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using System.Diagnostics;
 
 public class BootManager : MonoBehaviour
 {
@@ -168,6 +169,9 @@ public class BootManager : MonoBehaviour
     [Header("Post Boot")]
     public GameObject postBootObject;
     public GameObject Bloom;
+    public Texture2D defaultCursorTexture;
+
+    private Vector2 hotspot = Vector2.zero;
 
     private List<string> bootQueue = new List<string>();
 
@@ -232,6 +236,7 @@ public class BootManager : MonoBehaviour
         {
             postBootObject.SetActive(true);
             Bloom.SetActive(true);
+            SetDefaultCursor();
         }
     }
 
@@ -280,5 +285,17 @@ public class BootManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         terminalScrollRect.verticalNormalizedPosition = 0f;
         Canvas.ForceUpdateCanvases();
+    }
+
+    private void SetDefaultCursor()
+    {
+        if (defaultCursorTexture != null)
+        {
+            Cursor.SetCursor(defaultCursorTexture, hotspot, CursorMode.Auto);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Default cursor texture not assigned.");
+        }
     }
 }

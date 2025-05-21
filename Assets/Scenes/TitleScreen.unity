@@ -2238,10 +2238,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1099549269}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 475, y: -406.985}
-  m_SizeDelta: {x: 950, y: 893.97}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 950, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1118475628
 MonoBehaviour:
@@ -2974,6 +2974,7 @@ MonoBehaviour:
   bootDuration: 10
   postBootObject: {fileID: 450289519}
   Bloom: {fileID: 808905564}
+  defaultCursorTexture: {fileID: 2800000, guid: cdb1f4ad28743774f97108111443c748, type: 3}
 --- !u!1 &2012822953
 GameObject:
   m_ObjectHideFlags: 0
