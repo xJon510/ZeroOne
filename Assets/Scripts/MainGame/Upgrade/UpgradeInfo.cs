@@ -24,11 +24,20 @@ public class UpgradeInfo : MonoBehaviour
         upgradeCost = startCost;
     }
 
+    [Header("Panel Switcher")]
+    public CoreNodePanelSwitcher panelSwitcher;
+
     public void OnUpgradeClicked()
     {
         if (UpdateInfoPanel.Instance != null)
         {
             UpdateInfoPanel.Instance.DisplayUpgradeInfo(this);
+
+            // If we came from CoreStats, flip panels back
+            if (panelSwitcher != null)
+            {
+                panelSwitcher.ShowUpgradeInfo(); // bring UpgradeInfo back in
+            }
         }
         else
         {
@@ -52,4 +61,5 @@ public class UpgradeInfo : MonoBehaviour
         currentLevel++;
         UnityEngine.Debug.Log($"[Upgrade] {upgradeName} upgraded to level {currentLevel}!");
     }
+
 }

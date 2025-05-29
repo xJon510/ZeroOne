@@ -10,7 +10,7 @@ public class BitManager : MonoBehaviour
     public static BitManager Instance;
 
     [SerializeField] public ulong currentBits = 0;
-    public ulong winCondition = 83886080;
+    public ulong winCondition = 838860800;
 
     public float runTime = 0f;
     public TMP_Text runTimeText;
