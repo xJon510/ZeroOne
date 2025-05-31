@@ -32,6 +32,7 @@ public class BitManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        CoreStats.OnStatChanged += HandleStatChanged;
     }
 
     private void Update()
@@ -99,4 +100,20 @@ public class BitManager : MonoBehaviour
         return count;
     }
 
+    private void OnDestroy()
+    {
+        CoreStats.OnStatChanged -= HandleStatChanged;
+    }
+
+    private void HandleStatChanged(string statName, float newValue)
+    {
+        UnityEngine.Debug.Log($"[BitManager] Received stat change: {statName} = {newValue}");
+
+        if (statName == "FlatBitRate")
+        {
+            UpdateGlobalBitRate(newValue);
+            RefreshGridBitrates();
+            UnityEngine.Debug.Log($"[BitManager] Global BitRate updated to {newValue} via CoreStats");
+        }
+    }
 }

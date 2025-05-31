@@ -3,8 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 
+public enum UpgradeBranch
+{
+    CPU,
+    MEMORY,
+    LOGIC
+}
+
 public class UpgradeInfo : MonoBehaviour
 {
+    [Header("Upgrade Branch")]
+    public UpgradeBranch upgradeBranch;
+
     [Header("Upgrade Info")]
     public string upgradeName;
     public string passiveEffectDescription;
@@ -29,6 +39,13 @@ public class UpgradeInfo : MonoBehaviour
 
     public void OnUpgradeClicked()
     {
+        StartCoroutine(DelayedSelect());
+    }
+
+    private IEnumerator DelayedSelect()
+    {
+        yield return null; // Wait one frame
+
         if (UpdateInfoPanel.Instance != null)
         {
             UpdateInfoPanel.Instance.DisplayUpgradeInfo(this);

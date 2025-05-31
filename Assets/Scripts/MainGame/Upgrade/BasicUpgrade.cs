@@ -5,8 +5,8 @@ using UnityEngine;
 
 public enum CoreStatType
 {
-    RawBitRate,
-    BonusBitRatePercent,
+    FlatBitRate,
+    PercentBitRate,
     // Future stat keys...
 }
 
