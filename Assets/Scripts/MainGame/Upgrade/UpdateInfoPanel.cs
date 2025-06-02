@@ -15,6 +15,20 @@ public class UpdateInfoPanel : MonoBehaviour
     public TMP_Text costText;
     public TMP_Text effectText;
 
+    [Header("Milestone Texts")]
+    public TMP_Text milestone5Text;
+    public TMP_Text milestone10Text;
+    public TMP_Text milestone25Text;
+    public TMP_Text milestone50Text;
+    public TMP_Text milestone100Text;
+
+    [Header("Milestone Covers")]
+    public GameObject coverLv5;
+    public GameObject coverLv10;
+    public GameObject coverLv25;
+    public GameObject coverLv50;
+    public GameObject coverLv100;
+
     [Header("Dynamic Color Elements")]
     public List<Image> imagesToRecolor;
     public List<TMP_Text> textsToRecolor;
@@ -40,6 +54,12 @@ public class UpdateInfoPanel : MonoBehaviour
         costText.text = $"Cost: {upgrade.upgradeCost} bits";
         effectText.text = upgrade.passiveEffectDescription;
 
+        milestone5Text.text = $"Lv5: {upgrade.unlockAt5}";
+        milestone10Text.text = $"Lv10: {upgrade.unlockAt10}";
+        milestone25Text.text = $"Lv25: {upgrade.unlockAt25}";
+        milestone50Text.text = $"Lv50: {upgrade.unlockAt50}";
+        milestone100Text.text = $"Lv100: {upgrade.unlockAt100}";
+
         Color themeColor = GetBranchColor(upgrade.upgradeBranch);
 
         foreach (var img in imagesToRecolor)
@@ -61,6 +81,12 @@ public class UpdateInfoPanel : MonoBehaviour
         {
             CurrentSelectedUpgrade = null;
         }
+
+        coverLv5.SetActive(upgrade.currentLevel < 5);
+        coverLv10.SetActive(upgrade.currentLevel < 10);
+        coverLv25.SetActive(upgrade.currentLevel < 25);
+        coverLv50.SetActive(upgrade.currentLevel < 50);
+        coverLv100.SetActive(upgrade.currentLevel < 100);
     }
 
     public Color GetBranchColor(UpgradeBranch branch)

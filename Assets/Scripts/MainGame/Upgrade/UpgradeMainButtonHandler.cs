@@ -55,11 +55,21 @@ public static class BitRemoveUtility
 
 public class UpgradeMainButtonHandler : MonoBehaviour
 {
+    [Header("Visual Feedback")]
+    public BkRndShake shakeTarget;
+    public TMPro.TMP_Text costText;
+    public Color errorColor = Color.red;
+
+    public float flashDuration = 0.3f;
+
+    private Color originalColor;
+
     public BasicUpgrade upgrade;
 
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(AttemptUpgrade);
+        if (costText != null) originalColor = costText.color;
     }
 
     private void AttemptUpgrade()
@@ -76,6 +86,16 @@ public class UpgradeMainButtonHandler : MonoBehaviour
             if ((ulong)upgradeCost > bits)
             {
                 UnityEngine.Debug.LogWarning($"[UpgradeMainButton] Not enough bits. Needed: {upgradeCost}, Available: {bits}");
+                if (costText != null)
+                {
+                    StopAllCoroutines(); // in case it's still fading
+                    StartCoroutine(FlashCostText());
+                }
+
+                if (shakeTarget != null)
+                {
+                    shakeTarget.TriggerShake();
+                }
                 return;
             }
 
@@ -102,5 +122,14 @@ public class UpgradeMainButtonHandler : MonoBehaviour
         {
             UnityEngine.Debug.LogWarning("[UpgradeMainButton] No upgrade selected.");
         }
+    }
+
+    private IEnumerator FlashCostText()
+    {
+        Color currentColor = costText.color;
+
+        costText.color = errorColor;
+        yield return new WaitForSeconds(flashDuration);
+        costText.color = currentColor;
     }
 }

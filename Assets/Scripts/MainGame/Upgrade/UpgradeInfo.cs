@@ -28,6 +28,13 @@ public class UpgradeInfo : MonoBehaviour
     public float upgradeCostScale;
     public float passiveEffect;
 
+    [Header("Unlocks List")]
+    public string unlockAt5;
+    public string unlockAt10;
+    public string unlockAt25;
+    public string unlockAt50;
+    public string unlockAt100;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,10 +78,6 @@ public class UpgradeInfo : MonoBehaviour
             UnityEngine.Debug.Log($"[Upgrade] Not enough bits to upgrade {upgradeName}. Need {upgradeCost}, have {currentBits}");
             return;
         }
-
-        // Placeholder removal logic — we’ll eventually hook this into the proportional bit remover
-        //BitRemoveUtility.RemoveBitsFromGrids((int)upgradeCost);
-
         currentLevel++;
         UnityEngine.Debug.Log($"[Upgrade] {upgradeName} upgraded to level {currentLevel}!");
     }
