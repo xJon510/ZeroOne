@@ -24,6 +24,8 @@ public class BitManager : MonoBehaviour
 
     public float globalBitRate = 1f; // Total bits to generate per tick (float for smoother distribution)
 
+    public static event Action OnGameTick;
+
     private void Start()
     {
         UpdateGlobalBitRate(globalBitRate);
@@ -62,6 +64,7 @@ public class BitManager : MonoBehaviour
         {
             currentBits += grid.GetLocalBitValue(); // You'll expose this method
         }
+        OnGameTick?.Invoke();
     }
 
     [ContextMenu("Refresh Grid Bitrates")]

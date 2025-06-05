@@ -105,6 +105,17 @@ public class UpgradeMainButtonHandler : MonoBehaviour
             // Apply upgrade
             upgrade.ApplyUpgrade(CoreStats.Instance);
 
+            // Track upgrade in manager
+            if (UpgradeTrackerManager.Instance != null)
+            {
+                string upgradeName = upgrade.upgradeName;
+                int newLevel = upgrade.currentLevel;
+                string pathType = upgrade.upgradeInfo.upgradeBranch.ToString().ToLower(); // assuming it's an enum or string
+
+                UpgradeTrackerManager.Instance.RecordUpgrade(upgradeName, newLevel, pathType);
+                UnityEngine.Debug.Log($"[Tracker] Recorded upgrade: {upgradeName}, Level: {newLevel}, Path: {pathType}");
+            }
+
             // Update BitRate if applicable
             if (upgrade.statToModify == CoreStatType.FlatBitRate)
             {

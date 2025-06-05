@@ -36,6 +36,15 @@ public class BasicUpgrade : MonoBehaviour
         // Add stat to Core
         coreStats.AddStat(statToModify.ToString(), value);
 
+        // Update TrackerManager
+        if (UpgradeTrackerManager.Instance != null && upgradeInfo != null)
+        {
+            string name = upgradeName;
+            int newLevel = currentLevel;
+            string path = upgradeInfo.upgradeBranch.ToString().ToLower();
+            UpgradeTrackerManager.Instance.RecordUpgrade(name, currentLevel, path, this);
+        }
+
         // Update UpgradeInfo UI values
         if (upgradeInfo != null)
         {
