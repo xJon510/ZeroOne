@@ -189,4 +189,16 @@ public class BitGridManager : MonoBehaviour
         }
         return count;
     }
+
+    public void RefreshBitCharacters()
+    {
+        bitCharacters = GetComponentsInChildren<TMP_Text>();
+        bitTexts = bitCharacters;
+        localBitMax = (ulong)Mathf.Pow(2, bitCharacters.Length) - 1;
+    }
+
+    public ulong GetBitCapacity()
+    {
+        return (ulong)Mathf.Pow(2, maxCapacity) - 1;
+    }
 }

@@ -9,34 +9,53 @@ public static class BitRemoveUtility
     public static void RemoveBitsProportionally(int bitsToRemove)
     {
         var grids = BitManager.Instance.activeGrids;
-        ulong total = BitManager.Instance.currentBits;
+        if (bitsToRemove <= 0 || grids.Count == 0) return;
 
-        if (total == 0 || grids.Count == 0) return;
-
-        float totalFloat = (float)total;
         int remaining = bitsToRemove;
 
-        Dictionary<BitGridManager, int> removalMap = new Dictionary<BitGridManager, int>();
+        // Total capacity sum
+        float totalCapacity = 0f;
+        Dictionary<BitGridManager, float> gridCapacities = new Dictionary<BitGridManager, float>();
 
         foreach (var grid in grids)
         {
-            ulong gridBits = grid.GetLocalBitValue();
-            float ratio = gridBits / totalFloat;
+            float cap = grid.GetBitCapacity(); // Assuming you already have this method
+            gridCapacities[grid] = cap;
+            totalCapacity += cap;
+        }
+
+        // Compute inverse priority weights
+        Dictionary<BitGridManager, float> weights = new Dictionary<BitGridManager, float>();
+        float weightSum = 0f;
+
+        foreach (var grid in grids)
+        {
+            float cap = gridCapacities[grid];
+            float weight = 1f - (cap / totalCapacity); // lower capacity = higher weight
+            weight = Mathf.Max(0.01f, weight); // avoid zero
+            weights[grid] = weight;
+            weightSum += weight;
+        }
+
+        // Initial removal map
+        Dictionary<BitGridManager, int> removalMap = new Dictionary<BitGridManager, int>();
+        foreach (var grid in grids)
+        {
+            float ratio = weights[grid] / weightSum;
             int toRemove = Mathf.FloorToInt(ratio * bitsToRemove);
             removalMap[grid] = toRemove;
             remaining -= toRemove;
         }
 
+        // Distribute leftover bits
         foreach (var grid in grids)
         {
             if (remaining <= 0) break;
-            if (grid.GetLocalBitValue() > (ulong)removalMap[grid])
-            {
-                removalMap[grid] += 1;
-                remaining -= 1;
-            }
+            removalMap[grid] += 1;
+            remaining -= 1;
         }
 
+        // Actually remove the bits
         foreach (var kvp in removalMap)
         {
             BitGridManager grid = kvp.Key;

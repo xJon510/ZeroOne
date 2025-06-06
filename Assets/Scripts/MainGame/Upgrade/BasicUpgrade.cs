@@ -45,6 +45,18 @@ public class BasicUpgrade : MonoBehaviour
             UpgradeTrackerManager.Instance.RecordUpgrade(name, currentLevel, path, this);
         }
 
+        var gridCores = GameObject.FindObjectsOfType<GridCore>();
+        UnityEngine.Debug.Log($"[BasicUpgrade] Checking GridCores for upgradeName: {upgradeName}");
+        foreach (var core in gridCores)
+        {
+            UnityEngine.Debug.Log($"[BasicUpgrade] Found GridCore: {core.upgradeName}");
+            if (core.upgradeName == upgradeName)
+            {
+                UnityEngine.Debug.Log($"[BasicUpgrade] Match found. Calling CheckUpgradeMilestone() on {core.upgradeName}");
+                core.CheckUpgradeMilestone(currentLevel);
+            }
+        }
+
         // Update UpgradeInfo UI values
         if (upgradeInfo != null)
         {
