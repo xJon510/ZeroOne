@@ -68,18 +68,4 @@ public class UpgradeInfo : MonoBehaviour
             UnityEngine.Debug.LogWarning("[UpgradeInfo] No UpdateInfoPanel.Instance found!");
         }
     }
-
-    public void AttemptUpgrade()
-    {
-        ulong currentBits = BitManager.Instance.currentBits;
-
-        if (currentBits < (ulong)upgradeCost)
-        {
-            UnityEngine.Debug.Log($"[Upgrade] Not enough bits to upgrade {upgradeName}. Need {upgradeCost}, have {currentBits}");
-            return;
-        }
-        currentLevel++;
-        UnityEngine.Debug.Log($"[Upgrade] {upgradeName} upgraded to level {currentLevel}!");
-    }
-
 }

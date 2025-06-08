@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using TMPro;
 
 public enum CoreStatType
 {
@@ -10,8 +11,18 @@ public enum CoreStatType
     // Future stat keys...
 }
 
+public enum BranchType
+{
+    CPU,
+    MEM,
+    LOGIC,
+}
+
 public class BasicUpgrade : MonoBehaviour
 {
+    [Header("Upgrade Branch")]
+    public BranchType upgradeBranch;
+
     public UpgradeInfo upgradeInfo;
     public string upgradeName;
     public CoreStatType statToModify;
@@ -22,6 +33,18 @@ public class BasicUpgrade : MonoBehaviour
     public float statGainPerLevel = 1f; // Raw +1 per level, or +1% per level for percent stats
     public int currentLevel = 0;
 
+    public TextMeshProUGUI levelCounterText;
+    public TextMeshProUGUI levelNameText;
+
+    public UnityEngine.UI.Button upgradeButton;
+    public Color normalColor;
+    public Color highlightedColor;
+    public Color pressedColor;
+
+    public Color textColor;
+
+    private bool levelTenUnlocked = false;
+
     public float GetUpgradeCost(int level)
     {
         return baseCost + linearRate * level + quadraticRate * level * level;
@@ -30,6 +53,28 @@ public class BasicUpgrade : MonoBehaviour
     public void ApplyUpgrade(CoreStats coreStats)
     {
         currentLevel++;
+
+        if (currentLevel == 1)
+        {
+            UnlockLevelOne();
+        }
+
+        if (currentLevel >= 10 && !levelTenUnlocked)
+        {
+            if (upgradeBranch == BranchType.CPU)
+            {
+                UnlockCPUNodes();
+            }
+            if (upgradeBranch == BranchType.MEM)
+            {
+                UnlockMemNodes();
+            }
+            if (upgradeBranch == BranchType.LOGIC)
+            {
+                UnlockLogicNodes();
+            }
+            levelTenUnlocked = true;
+        }
 
         float value = statGainPerLevel;
 
@@ -57,6 +102,8 @@ public class BasicUpgrade : MonoBehaviour
             }
         }
 
+        UpdateLvlText(currentLevel);
+
         // Update UpgradeInfo UI values
         if (upgradeInfo != null)
         {
@@ -66,5 +113,140 @@ public class BasicUpgrade : MonoBehaviour
         }
 
         UnityEngine.Debug.Log($"[BasicUpgrade] {upgradeName} upgraded to level {currentLevel}. Cost now: {upgradeInfo.upgradeCost}");
+    }
+
+    public void UpdateLvlText(float currLevel)
+    {
+        if (levelCounterText != null)
+        {
+            levelCounterText.text = $"Lvl {currLevel}";
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"[Upgrade] No TextMeshProUGUI found for {upgradeName}");
+        }
+    }
+
+    public void UnlockLevelOne()
+    {
+        // Change button colors
+        if (upgradeButton != null)
+        {
+            var colors = upgradeButton.colors;
+            colors.normalColor = normalColor;
+            colors.highlightedColor = highlightedColor;
+            colors.pressedColor = pressedColor;
+            upgradeButton.colors = colors;
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning($"[UnlockLevelOne] No button assigned to {upgradeName}");
+        }
+
+        // Change text colors
+        if (levelCounterText != null)
+            levelCounterText.color = textColor;
+
+        if (levelNameText != null)
+            levelNameText.color = textColor;
+    }
+
+    private void UnlockCPUNodes()
+    {
+        NodeConnector connector = GetComponent<NodeConnector>();
+        if (connector == null)
+        {
+            UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] No NodeConnector on {upgradeName}");
+            return;
+        }
+
+        List<NodeConnector> northernNodes = new List<NodeConnector> {
+        connector.northWest,
+        connector.north,
+        connector.northEast
+        };
+
+        foreach (var node in northernNodes)
+        {
+            if (node != null)
+            {
+                var upgrade = node.GetComponent<BasicUpgrade>();
+                if (upgrade != null && upgrade.upgradeButton != null)
+                {
+                    upgrade.upgradeButton.interactable = true;
+                    UnityEngine.Debug.Log($"[UnlockNorthernNodes] Unlocked: {upgrade.upgradeName}");
+                }
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] Node or button missing for a neighbor of {upgradeName}");
+                }
+            }
+        }
+    }
+
+    private void UnlockLogicNodes()
+    {
+        NodeConnector connector = GetComponent<NodeConnector>();
+        if (connector == null)
+        {
+            UnityEngine.Debug.LogWarning($"[UnlockLogicNodes] No NodeConnector on {upgradeName}");
+            return;
+        }
+
+        List<NodeConnector> northernNodes = new List<NodeConnector> {
+        connector.northEast,
+        connector.southEast,
+        connector.south
+        };
+
+        foreach (var node in northernNodes)
+        {
+            if (node != null)
+            {
+                var upgrade = node.GetComponent<BasicUpgrade>();
+                if (upgrade != null && upgrade.upgradeButton != null)
+                {
+                    upgrade.upgradeButton.interactable = true;
+                    UnityEngine.Debug.Log($"[UnlockLogicNodes] Unlocked: {upgrade.upgradeName}");
+                }
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"[UnlockLogicNodes] Node or button missing for a neighbor of {upgradeName}");
+                }
+            }
+        }
+    }
+
+    private void UnlockMemNodes()
+    {
+        NodeConnector connector = GetComponent<NodeConnector>();
+        if (connector == null)
+        {
+            UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] No NodeConnector on {upgradeName}");
+            return;
+        }
+
+        List<NodeConnector> northernNodes = new List<NodeConnector> {
+        connector.northWest,
+        connector.southWest,
+        connector.south
+        };
+
+        foreach (var node in northernNodes)
+        {
+            if (node != null)
+            {
+                var upgrade = node.GetComponent<BasicUpgrade>();
+                if (upgrade != null && upgrade.upgradeButton != null)
+                {
+                    upgrade.upgradeButton.interactable = true;
+                    UnityEngine.Debug.Log($"[UnlockNorthernNodes] Unlocked: {upgrade.upgradeName}");
+                }
+                else
+                {
+                    UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] Node or button missing for a neighbor of {upgradeName}");
+                }
+            }
+        }
     }
 }
