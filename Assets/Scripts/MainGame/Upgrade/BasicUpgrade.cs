@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
 using TMPro;
+using System;
 
 public enum CoreStatType
 {
@@ -50,6 +51,11 @@ public class BasicUpgrade : MonoBehaviour
         return baseCost + linearRate * level + quadraticRate * level * level;
     }
 
+    public int UpgradeLevel()
+    {
+        return currentLevel;
+    }
+
     public void ApplyUpgrade(CoreStats coreStats)
     {
         currentLevel++;
@@ -57,6 +63,13 @@ public class BasicUpgrade : MonoBehaviour
         if (currentLevel == 1)
         {
             UnlockLevelOne();
+
+            // Activate assigned grid if helper exists
+            var gridHelper = GetComponent<GridCoreHelper>();
+            if (gridHelper != null)
+            {
+                gridHelper.TryActivateGrid();
+            }
         }
 
         if (currentLevel >= 10 && !levelTenUnlocked)
@@ -76,6 +89,13 @@ public class BasicUpgrade : MonoBehaviour
             levelTenUnlocked = true;
         }
 
+        //CorePulse
+        var pulse = GetComponent<CorePulse>();
+        if (pulse != null)
+        {
+            pulse.RecalculateFlatBitRate();
+        }
+
         float value = statGainPerLevel;
 
         // Add stat to Core
@@ -91,13 +111,13 @@ public class BasicUpgrade : MonoBehaviour
         }
 
         var gridCores = GameObject.FindObjectsOfType<GridCore>();
-        UnityEngine.Debug.Log($"[BasicUpgrade] Checking GridCores for upgradeName: {upgradeName}");
+        //UnityEngine.Debug.Log($"[BasicUpgrade] Checking GridCores for upgradeName: {upgradeName}");
         foreach (var core in gridCores)
         {
-            UnityEngine.Debug.Log($"[BasicUpgrade] Found GridCore: {core.upgradeName}");
+            //UnityEngine.Debug.Log($"[BasicUpgrade] Found GridCore: {core.upgradeName}");
             if (core.upgradeName == upgradeName)
             {
-                UnityEngine.Debug.Log($"[BasicUpgrade] Match found. Calling CheckUpgradeMilestone() on {core.upgradeName}");
+                //UnityEngine.Debug.Log($"[BasicUpgrade] Match found. Calling CheckUpgradeMilestone() on {core.upgradeName}");
                 core.CheckUpgradeMilestone(currentLevel);
             }
         }
@@ -174,11 +194,11 @@ public class BasicUpgrade : MonoBehaviour
                 if (upgrade != null && upgrade.upgradeButton != null)
                 {
                     upgrade.upgradeButton.interactable = true;
-                    UnityEngine.Debug.Log($"[UnlockNorthernNodes] Unlocked: {upgrade.upgradeName}");
+                    UnityEngine.Debug.Log($"[UnlockCPUNodes] Unlocked: {upgrade.upgradeName}");
                 }
                 else
                 {
-                    UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] Node or button missing for a neighbor of {upgradeName}");
+                    UnityEngine.Debug.LogWarning($"[UnlockCPUNodes] Node or button missing for a neighbor of {upgradeName}");
                 }
             }
         }
@@ -222,7 +242,7 @@ public class BasicUpgrade : MonoBehaviour
         NodeConnector connector = GetComponent<NodeConnector>();
         if (connector == null)
         {
-            UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] No NodeConnector on {upgradeName}");
+            UnityEngine.Debug.LogWarning($"[UnlockMEMNodes] No NodeConnector on {upgradeName}");
             return;
         }
 
@@ -240,11 +260,11 @@ public class BasicUpgrade : MonoBehaviour
                 if (upgrade != null && upgrade.upgradeButton != null)
                 {
                     upgrade.upgradeButton.interactable = true;
-                    UnityEngine.Debug.Log($"[UnlockNorthernNodes] Unlocked: {upgrade.upgradeName}");
+                    UnityEngine.Debug.Log($"[UnlockMEMNodes] Unlocked: {upgrade.upgradeName}");
                 }
                 else
                 {
-                    UnityEngine.Debug.LogWarning($"[UnlockNorthernNodes] Node or button missing for a neighbor of {upgradeName}");
+                    UnityEngine.Debug.LogWarning($"[UnlockMEMNodes] Node or button missing for a neighbor of {upgradeName}");
                 }
             }
         }
