@@ -16,7 +16,9 @@ public class UpgradeInfo : MonoBehaviour
     public UpgradeBranch upgradeBranch;
 
     [Header("Upgrade Info")]
+    [TextArea]
     public string upgradeName;
+    [TextArea]
     public string passiveEffectDescription;
 
     [Header("Starting Values")]

@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class HidePanel : MonoBehaviour
 {
+    private CoreNodePanelSwitcher panelSwitcher;
+
     [Header("Panel to Move")]
     public RectTransform panel;
 
     [Header("Move Positions")]
-    public Vector2 visiblePosition; // Optional if you want to bring it back later
+    public Vector2 visiblePosition;
     public Vector2 hiddenPosition;
 
     [Header("Animation")]
     public float moveDuration = 0.3f;
+
+    void Start()
+    {
+        if (panelSwitcher == null)
+            panelSwitcher = FindObjectOfType<CoreNodePanelSwitcher>();
+    }
 
     public void Hide()
     {
@@ -20,6 +28,13 @@ public class HidePanel : MonoBehaviour
         {
             StopAllCoroutines();
             StartCoroutine(MovePanel(panel.anchoredPosition, hiddenPosition));
+
+            UnityEngine.Debug.Log(panelSwitcher != null);
+            if (panelSwitcher != null)
+            {
+                panelSwitcher.currentPanel = ActivePanel.None;
+                UnityEngine.Debug.Log("(ME) Panel set to None");
+            }
         }
     }
 

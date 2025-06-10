@@ -4,6 +4,7 @@ using UnityEngine;
 
 public enum ActivePanel
 {
+    None,
     UpgradeInfo,
     CoreStats
 }
