@@ -17,8 +17,19 @@ public class CoCScreenMovement : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            lastMousePosition = Input.mousePosition;
-            isDragging = true;
+            Vector3 mousePos = Input.mousePosition;
+
+            float minX = 165f;
+            float maxX = Screen.width - 165f;
+            float minY = 145f;
+            float maxY = Screen.height - 145f;
+
+            if (mousePos.x >= minX && mousePos.x <= maxX &&
+                mousePos.y >= minY && mousePos.y <= maxY)
+            {
+                lastMousePosition = mousePos;
+                isDragging = true;
+            }
         }
 
         if (Input.GetMouseButton(0) && isDragging)
@@ -27,7 +38,6 @@ public class CoCScreenMovement : MonoBehaviour
             Vector3 delta = currentMousePosition - lastMousePosition;
 
             upgradeHolder.anchoredPosition += (Vector2)(delta * sensitvity);
-
             upgradeHolder.anchoredPosition = ClampToBounds(upgradeHolder.anchoredPosition);
 
             lastMousePosition = currentMousePosition;
@@ -51,4 +61,20 @@ public class CoCScreenMovement : MonoBehaviour
 
         return new Vector2(clampedX, clampedY);
     }
+
+    //void OnGUI()      Debug Visual
+    //{
+    //    float minX = 165f;
+    //    float maxX = Screen.width - 165f;
+    //    float minY = 145f;
+    //    float maxY = Screen.height - 145f;
+
+    //    float width = maxX - minX;
+    //    float height = maxY - minY;
+
+    //    Color prevColor = GUI.color;
+    //    GUI.color = new Color(0f, 0.2f, 1f, 0.2f); // semi-transparent blue
+    //    GUI.DrawTexture(new Rect(minX, Screen.height - maxY, width, height), Texture2D.whiteTexture);
+    //    GUI.color = prevColor;
+    //}
 }
