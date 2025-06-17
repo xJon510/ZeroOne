@@ -44,6 +44,8 @@ public class BasicUpgrade : MonoBehaviour
 
     public Color textColor;
 
+    public Animator upgradeAnimator;
+
     private bool levelTenUnlocked = false;
 
     public float GetUpgradeCost(int level)
@@ -149,26 +151,15 @@ public class BasicUpgrade : MonoBehaviour
 
     public void UnlockLevelOne()
     {
-        // Change button colors
-        if (upgradeButton != null)
+        // Tell the Animator to switch to the Unlocked visuals
+        if (upgradeAnimator != null)
         {
-            var colors = upgradeButton.colors;
-            colors.normalColor = normalColor;
-            colors.highlightedColor = highlightedColor;
-            colors.pressedColor = pressedColor;
-            upgradeButton.colors = colors;
+            upgradeAnimator.SetBool("UnlockedLevel1", true);
         }
         else
         {
-            UnityEngine.Debug.LogWarning($"[UnlockLevelOne] No button assigned to {upgradeName}");
+            UnityEngine.Debug.LogWarning($"[UnlockLevelOne] No Animator assigned to {upgradeName}");
         }
-
-        // Change text colors
-        if (levelCounterText != null)
-            levelCounterText.color = textColor;
-
-        if (levelNameText != null)
-            levelNameText.color = textColor;
     }
 
     private void UnlockCPUNodes()
