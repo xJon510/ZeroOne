@@ -6,7 +6,7 @@ using UnityEngine;
 public enum UpgradeBranch
 {
     CPU,
-    MEMORY,
+    MEM,
     LOGIC
 }
 

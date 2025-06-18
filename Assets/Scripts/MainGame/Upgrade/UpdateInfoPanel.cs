@@ -94,7 +94,7 @@ public class UpdateInfoPanel : MonoBehaviour
         switch (branch)
         {
             case UpgradeBranch.CPU: return cpuColor;
-            case UpgradeBranch.MEMORY: return memoryColor;
+            case UpgradeBranch.MEM: return memoryColor;
             case UpgradeBranch.LOGIC: return logicColor;
             default:return Color.white;
         }

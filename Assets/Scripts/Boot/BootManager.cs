@@ -8,6 +8,8 @@ using System.Diagnostics;
 
 public class BootManager : MonoBehaviour
 {
+    private bool skipRequested = false;
+
     [Header("UI References")]
     public CanvasGroup bootScreenUI; // Terminal output screen
     public CanvasGroup titleScreenUI; // Main menu
@@ -177,15 +179,35 @@ public class BootManager : MonoBehaviour
 
     private void Start()
     {
-        // Set borderless windowed at 960x540
-        Screen.SetResolution(960, 540, false);
-        Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+        // Check if we should skip the boot
+        if (PlayerPrefs.GetInt("SkipBoot", 0) == 1)
+        {
+            // Clear the flag for future clean boots
+            PlayerPrefs.SetInt("SkipBoot", 0);
+            PlayerPrefs.Save();
+
+            // Instantly go to title screen (no animation)
+            SkipToTitleImmediate();
+            return;
+        }
 
         // Clear console
         consoleText.text = "";
-
+        // Set borderless windowed at 960x540
+        Screen.SetResolution(960, 540, false);
+        Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
         // Start the boot sequence
         StartCoroutine(BootSequence());
+    }
+
+    private void Update()
+    {
+        if (Input.anyKeyDown && !skipRequested)
+        {
+            skipRequested = true;
+            StopAllCoroutines();
+            StartCoroutine(SkipToTitle());
+        }
     }
 
     IEnumerator BootSequence()
@@ -238,6 +260,8 @@ public class BootManager : MonoBehaviour
             Bloom.SetActive(true);
             SetDefaultCursor();
         }
+
+        LogInitializer.InitializeAllLogs();
     }
 
     void GenerateBootQueue()
@@ -297,5 +321,51 @@ public class BootManager : MonoBehaviour
         {
             UnityEngine.Debug.LogWarning("Default cursor texture not assigned.");
         }
+    }
+
+    IEnumerator SkipToTitle()
+    {
+        consoleText.text += "\n\n[SYS] Boot sequence manually skipped.\n";
+
+        yield return new WaitForSeconds(1f); // slight delay for clarity
+
+        bootScreenUI.alpha = 0;
+        bootScreenUI.interactable = false;
+        bootScreenUI.blocksRaycasts = false;
+
+        titleScreenUI.alpha = 1;
+        titleScreenUI.interactable = true;
+        titleScreenUI.blocksRaycasts = true;
+
+        Screen.fullScreen = true;
+
+        if (postBootObject != null)
+        {
+            postBootObject.SetActive(true);
+            Bloom.SetActive(true);
+            SetDefaultCursor();
+        }
+        LogInitializer.InitializeAllLogs();
+    }
+
+    private void SkipToTitleImmediate()
+    {
+        bootScreenUI.alpha = 0;
+        bootScreenUI.interactable = false;
+        bootScreenUI.blocksRaycasts = false;
+
+        titleScreenUI.alpha = 1;
+        titleScreenUI.interactable = true;
+        titleScreenUI.blocksRaycasts = true;
+
+        Screen.fullScreen = true;
+
+        if (postBootObject != null)
+        {
+            postBootObject.SetActive(true);
+            Bloom.SetActive(true);
+            SetDefaultCursor();
+        }
+        LogInitializer.InitializeAllLogs();
     }
 }

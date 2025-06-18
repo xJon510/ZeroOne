@@ -119,4 +119,10 @@ public class BitManager : MonoBehaviour
             UnityEngine.Debug.Log($"[BitManager] Global BitRate updated to {newValue} via CoreStats");
         }
     }
+
+    public void AddToRunTime(float savedSeconds)
+    {
+        runTime += savedSeconds;
+        UpdateRunTimeText();
+    }
 }

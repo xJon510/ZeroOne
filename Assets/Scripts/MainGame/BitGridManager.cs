@@ -201,4 +201,9 @@ public class BitGridManager : MonoBehaviour
     {
         return (ulong)Mathf.Pow(2, maxCapacity) - 1;
     }
+
+    public void SetLocalBitValue(ulong value)
+    {
+        localBitValue = value;
+    }
 }

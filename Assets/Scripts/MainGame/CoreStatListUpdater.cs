@@ -27,7 +27,7 @@ public class CoreStatListUpdater : MonoBehaviour
     private readonly Dictionary<StatBranch, int> branchOrder = new()
 {
     { StatBranch.BASIC, 0 },
-    { StatBranch.MEMORY, 1 },
+    { StatBranch.MEM, 1 },
     { StatBranch.CPU, 2 },
     { StatBranch.LOGIC, 3 }
 };
@@ -109,7 +109,7 @@ public class CoreStatListUpdater : MonoBehaviour
             return data.branch switch
             {
                 StatBranch.CPU => cpuColor,
-                StatBranch.MEMORY => memoryColor,
+                StatBranch.MEM => memoryColor,
                 StatBranch.LOGIC => logicColor,
                 _ => basicColor,
             };

@@ -16,12 +16,7 @@ public class CorePulse : MonoBehaviour
     private float storageRatioCheckTimer = 0f;
     private float lastStorageRatio = 0f;
 
-    private void Start()
-    {
-        coreStats = FindObjectOfType<CoreStats>();
-        bitManager = FindObjectOfType<BitManager>();
-        thisUpgrade = GetComponent<BasicUpgrade>();
-    }
+    private bool initialized = false;
 
     private void Update()
     {
@@ -48,8 +43,16 @@ public class CorePulse : MonoBehaviour
 
     public void RecalculateFlatBitRate()
     {
+        LazyInit();
+
         int level = thisUpgrade.UpgradeLevel();
         if (level < 1) return;
+
+        if (coreStats == null)
+        {
+            UnityEngine.Debug.LogWarning("[CorePulse] coreStats is null in RecalculateFlatBitRate");
+            return;
+        }
 
         // Remove previous amount
         if (lastAppliedFlatAmount != 0f)
@@ -101,5 +104,16 @@ public class CorePulse : MonoBehaviour
             return baseAmount * 0.25f;
         }
         return 0f;
+    }
+
+    void LazyInit()
+    {
+        if (initialized) return;
+
+        thisUpgrade = GetComponent<BasicUpgrade>();
+        coreStats = FindObjectOfType<CoreStats>();
+        bitManager = FindObjectOfType<BitManager>();
+
+        initialized = true;
     }
 }

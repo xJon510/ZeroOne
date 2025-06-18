@@ -147,6 +147,10 @@ public class UpgradeMainButtonHandler : MonoBehaviour
             {
                 UpdateInfoPanel.Instance.DisplayUpgradeInfo(upgrade.upgradeInfo);
             }
+
+            // Save :P
+            SaveManager.Instance?.SaveGame();
+
         }
         else
         {
