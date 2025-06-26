@@ -205,5 +205,6 @@ public class BitGridManager : MonoBehaviour
     public void SetLocalBitValue(ulong value)
     {
         localBitValue = value;
+        UpdateVisuals();
     }
 }

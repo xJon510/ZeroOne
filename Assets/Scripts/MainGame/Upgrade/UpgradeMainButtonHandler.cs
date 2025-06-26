@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,25 +13,27 @@ public static class BitRemoveUtility
 
         int remaining = bitsToRemove;
 
+        // Filter out any grids with zero capacity
+        grids = grids.FindAll(g => g.GetBitCapacity() > 0);
+
         // Total capacity sum
         float totalCapacity = 0f;
-        Dictionary<BitGridManager, float> gridCapacities = new Dictionary<BitGridManager, float>();
+        Dictionary<BitGridManager, float> capacities = new Dictionary<BitGridManager, float>();
 
         foreach (var grid in grids)
         {
             float cap = grid.GetBitCapacity(); // Assuming you already have this method
-            gridCapacities[grid] = cap;
+            capacities[grid] = cap;
             totalCapacity += cap;
         }
 
-        // Compute inverse priority weights
+        // Inverted weights: smaller grid = higher priority
         Dictionary<BitGridManager, float> weights = new Dictionary<BitGridManager, float>();
         float weightSum = 0f;
 
         foreach (var grid in grids)
         {
-            float cap = gridCapacities[grid];
-            float weight = 1f - (cap / totalCapacity); // lower capacity = higher weight
+            float weight = 1f - (capacities[grid] / totalCapacity); // lower capacity = higher weight
             weight = Mathf.Max(0.01f, weight); // avoid zero
             weights[grid] = weight;
             weightSum += weight;
@@ -39,36 +41,58 @@ public static class BitRemoveUtility
 
         // Initial removal map
         Dictionary<BitGridManager, int> removalMap = new Dictionary<BitGridManager, int>();
+        int totalPlanned = 0;
         foreach (var grid in grids)
         {
             float ratio = weights[grid] / weightSum;
-            int toRemove = Mathf.FloorToInt(ratio * bitsToRemove);
-            removalMap[grid] = toRemove;
-            remaining -= toRemove;
+            int planned = Mathf.FloorToInt(ratio * bitsToRemove);
+            removalMap[grid] = planned;
+            totalPlanned += planned;
         }
 
-        // Distribute leftover bits
-        foreach (var grid in grids)
+        // Adjust to match exact amount
+        int diff = totalPlanned - bitsToRemove;
+        if (diff != 0)
         {
-            if (remaining <= 0) break;
-            removalMap[grid] += 1;
-            remaining -= 1;
+            foreach (var grid in grids)
+            {
+                if (diff == 0) break;
+
+                if (diff > 0 && removalMap[grid] > 0)
+                {
+                    removalMap[grid]--;
+                    diff--;
+                }
+                else if (diff < 0)
+                {
+                    removalMap[grid]++;
+                    diff++;
+                }
+            }
         }
 
-        // Actually remove the bits
+        // Apply removals
         foreach (var kvp in removalMap)
         {
-            BitGridManager grid = kvp.Key;
+            var grid = kvp.Key;
             int toRemove = kvp.Value;
+
             ulong current = grid.GetLocalBitValue();
-            ulong newValue = (ulong)Mathf.Max(0, (long)current - toRemove);
-
-            var field = typeof(BitGridManager).GetField("localBitValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var method = typeof(BitGridManager).GetMethod("UpdateDebugText", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-
-            if (field != null) field.SetValue(grid, newValue);
-            if (method != null) method.Invoke(grid, null);
+            int safeRemove = Mathf.Min(toRemove, (int)current);
+            grid.SetLocalBitValue((ulong)(current - (ulong)safeRemove));
+            grid.RefreshBitCharacters(); // ensure visual update
         }
+
+        BitManager.Instance.RefreshGridBitrates(); // optional but safe
+
+        ulong total = 0;
+        foreach (var grid in BitManager.Instance.activeGrids)
+        {
+            total += grid.GetLocalBitValue();
+        }
+        UnityEngine.Debug.Log($"[BitRemove] New total bits: {total} (ME)");
+
+        BitManager.Instance.RecalculateTotalBits();
     }
 }
 
@@ -99,7 +123,8 @@ public class UpgradeMainButtonHandler : MonoBehaviour
 
         if (upgrade != null)
         {
-            float upgradeCost = upgrade.GetUpgradeCost(upgrade.currentLevel); // next level cost
+            float upgradeCost = upgrade.GetUpgradeCost(upgrade.currentLevel);
+
             ulong bits = BitManager.Instance.currentBits;
 
             if ((ulong)upgradeCost > bits)
@@ -120,6 +145,7 @@ public class UpgradeMainButtonHandler : MonoBehaviour
 
             // Deduct cost
             BitRemoveUtility.RemoveBitsProportionally((int)upgradeCost);
+            UnityEngine.Debug.Log($"[UpgradeMainButton] {(int)upgradeCost} Removed From Total (ME)");
 
             // Apply upgrade
             upgrade.ApplyUpgrade(CoreStats.Instance);

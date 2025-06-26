@@ -38,7 +38,7 @@ public class LogInitializer : MonoBehaviour
   ""lastSaveTime"": ""{timestamp}"",
   ""playTime"": 0.0,
 
-  ""coreStats"": {{
+  ""CoreStats"": {{
     ""globalBitCount"": 0,
     ""globalBitRate"": 1.0
   }},

@@ -17,6 +17,8 @@ public class SaveInitializer : MonoBehaviour
 
     IEnumerator InitializeGameData()
     {
+        yield return null;
+
         if (loadingScreen != null) loadingScreen.SetActive(true);
 
         float startTime = Time.time;
@@ -65,6 +67,8 @@ public class SaveInitializer : MonoBehaviour
         if (upgradeUI != null) upgradeUI.SetActive(false);
         if (loadingScreen != null) loadingScreen.SetActive(false);
 
+        UnityEngine.Debug.Log($"(ME) {loadedState.CoreStats.globalBitRate} ");
+
         UnityEngine.Debug.Log("[SaveInitializer] Save loaded successfully.");
     }
 
@@ -86,7 +90,6 @@ public class SaveInitializer : MonoBehaviour
                     if (upgrade.level >= 1)
                     {
                         u.UnlockLevelOne();
-                        UnityEngine.Debug.Log("[SaveInitializer] Unlocked Level 1 (ME)");
                     }
                 }
             }

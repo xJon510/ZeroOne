@@ -125,4 +125,13 @@ public class BitManager : MonoBehaviour
         runTime += savedSeconds;
         UpdateRunTimeText();
     }
+
+    public void RecalculateTotalBits()
+    {
+        currentBits = 0;
+        foreach (BitGridManager grid in activeGrids)
+        {
+            currentBits += grid.GetLocalBitValue();
+        }
+    }
 }

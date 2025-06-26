@@ -130,7 +130,7 @@ public class BasicUpgrade : MonoBehaviour
         if (upgradeInfo != null)
         {
             upgradeInfo.currentLevel = currentLevel;
-            upgradeInfo.upgradeCost = GetUpgradeCost(currentLevel + 1); // Cost of next level
+            upgradeInfo.upgradeCost = GetUpgradeCost(currentLevel); // Cost of next level
             upgradeInfo.passiveEffect = statGainPerLevel * (currentLevel); // total effect
         }
 

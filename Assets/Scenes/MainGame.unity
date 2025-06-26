@@ -3497,7 +3497,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &67380769
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21135,7 +21135,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 582657305}
 --- !u!114 &582657300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29263,7 +29263,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 898967435}
 --- !u!114 &898967430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30797,7 +30797,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 961928376}
 --- !u!114 &961928371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37350,7 +37350,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1184022710}
 --- !u!114 &1184022704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37818,7 +37818,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1189378724}
 --- !u!114 &1189378720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40308,7 +40308,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1249594231}
 --- !u!114 &1249594226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48022,7 +48022,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1467208096}
 --- !u!114 &1467208083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48432,7 +48432,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1498599685}
 --- !u!114 &1498599679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61523,7 +61523,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1921969839}
 --- !u!114 &1921969834
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64724,7 +64724,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 1998131962}
 --- !u!114 &1998131957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66442,7 +66442,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 2040373308}
 --- !u!114 &2040373295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69666,6 +69666,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2115625701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115625687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55f54e2ccf6430240a96bb1580676dd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridToActivate: {fileID: 1281691690}
 --- !u!1 &2118005964 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4787634653559285097, guid: 4c5431783677ff047851c5db8dd9c032, type: 3}
@@ -70225,7 +70238,7 @@ MonoBehaviour:
   highlightedColor: {r: 0.5518868, g: 1, b: 0.6095647, a: 1}
   pressedColor: {r: 0, g: 0.509434, b: 0, a: 1}
   textColor: {r: 0.23137255, g: 1, b: 0.32941177, a: 1}
-  upgradeAnimator: {fileID: 0}
+  upgradeAnimator: {fileID: 2136997138}
 --- !u!114 &2136997125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71356,6 +71369,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4787634653559285097, guid: 4c5431783677ff047851c5db8dd9c032, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2115625693}
+    - targetCorrespondingSourceObject: {fileID: 4787634653559285097, guid: 4c5431783677ff047851c5db8dd9c032, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2115625701}
     - targetCorrespondingSourceObject: {fileID: 4787634653559285097, guid: 4c5431783677ff047851c5db8dd9c032, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2115625697}
