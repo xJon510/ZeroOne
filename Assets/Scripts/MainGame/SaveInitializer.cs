@@ -46,7 +46,7 @@ public class SaveInitializer : MonoBehaviour
         BitManager.Instance.AddToRunTime(loadedState.playTime);
 
         // Apply Upgrades
-        ApplyUpgrades(loadedState.upgrades.cpu);
+        ApplyCPUUpgrades(loadedState.upgrades.cpu);
         ApplyUpgrades(loadedState.upgrades.mem);
         ApplyUpgrades(loadedState.upgrades.logic);
 
@@ -93,6 +93,43 @@ public class SaveInitializer : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    void ApplyCPUUpgrades(List<UpgradeSaveData> upgrades)
+    {
+        // Apply upgrade levels
+        BasicUpgrade[] allUpgrades = FindObjectsOfType<BasicUpgrade>(true);
+
+        foreach (var upgrade in upgrades)
+        {
+            foreach (var u in allUpgrades)
+            {
+                if (u.upgradeName == upgrade.name)
+                {
+                    for (int i = 0; i < upgrade.level; i++)
+                    {
+                        u.ApplyUpgrade(CoreStats.Instance);
+                    }
+
+                    if (upgrade.level >= 1)
+                    {
+                        u.UnlockLevelOne();
+                    }
+                }
+            }
+        }
+
+
+        // Apply CPU discount to upgrade cost visuals
+        float cpuDiscount = CoreStats.Instance.GetStat("CPU Discount");
+        if (cpuDiscount <= 0f) return;
+
+        foreach (var u in allUpgrades)
+        {
+                float rawCost = u.GetUpgradeCost(u.currentLevel);
+                float finalCost = rawCost - (rawCost * (cpuDiscount / 100f));
+                u.upgradeInfo.upgradeCost = finalCost;
         }
     }
 }

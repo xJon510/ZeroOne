@@ -130,7 +130,20 @@ public class BasicUpgrade : MonoBehaviour
         if (upgradeInfo != null)
         {
             upgradeInfo.currentLevel = currentLevel;
-            upgradeInfo.upgradeCost = GetUpgradeCost(currentLevel); // Cost of next level
+
+            float rawCost = GetUpgradeCost(currentLevel);
+            float finalCost = rawCost;
+
+            if (upgradeBranch == BranchType.CPU)
+            {
+                float cpuDiscount = CoreStats.Instance.GetStat("CPU Discount");
+                if (cpuDiscount > 0f)
+                {
+                    finalCost -= rawCost * (cpuDiscount / 100);
+                }
+            }
+
+            upgradeInfo.upgradeCost = finalCost; // Use discounted cost
             upgradeInfo.passiveEffect = statGainPerLevel * (currentLevel); // total effect
         }
 

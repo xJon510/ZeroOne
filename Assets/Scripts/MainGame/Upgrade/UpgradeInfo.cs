@@ -70,4 +70,16 @@ public class UpgradeInfo : MonoBehaviour
             UnityEngine.Debug.LogWarning("[UpgradeInfo] No UpdateInfoPanel.Instance found!");
         }
     }
+
+    public float GetUpgradeCost(int level)
+    {
+        var basic = GetComponent<BasicUpgrade>();
+        if (basic == null)
+        {
+            UnityEngine.Debug.LogWarning($"[UpgradeInfo] No BasicUpgrade found on {upgradeName}");
+            return startCost;
+        }
+
+        return basic.GetUpgradeCost(level);
+    }
 }

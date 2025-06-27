@@ -40,18 +40,37 @@ public class UpdateInfoPanel : MonoBehaviour
 
     public static BasicUpgrade CurrentSelectedUpgrade { get; private set; }
 
+    private CoreStats coreStats;
+
     private void Awake()
     {
         Instance = this; // So UpgradeInfo buttons can easily call it
+        coreStats = CoreStats.Instance;
     }
 
     public void DisplayUpgradeInfo(UpgradeInfo upgrade)
     {
         if (upgrade == null) return;
 
+        // Recalculate discounted upgrade cost
+        if (upgrade.upgradeBranch == UpgradeBranch.CPU)
+        {
+            float rawCost = upgrade.GetUpgradeCost((int)upgrade.currentLevel);
+            float cpuDiscount = CoreStats.Instance.GetStat("CPU Discount");
+            float finalCost = rawCost;
+
+            if (cpuDiscount > 0f)
+            {
+                finalCost -= rawCost * (cpuDiscount / 100f);
+            }
+
+            upgrade.upgradeCost = finalCost;
+            UnityEngine.Debug.Log($"(ME) rawCost:{rawCost} CPU Discount: {cpuDiscount} startcost: {upgrade.startCost} cost scale: {upgrade.upgradeCostScale} level: {upgrade.currentLevel}");
+        }
+
         titleText.text = upgrade.upgradeName;
         levelText.text = $"Level: {upgrade.currentLevel}";
-        costText.text = $"Cost: {upgrade.upgradeCost} bits";
+        costText.text = $"Cost: {upgrade.upgradeCost:F1} bits";
         effectText.text = upgrade.passiveEffectDescription;
 
         milestone5Text.text = $"Lv5: {upgrade.unlockAt5}";

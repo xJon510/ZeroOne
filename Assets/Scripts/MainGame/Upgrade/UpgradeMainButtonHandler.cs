@@ -71,7 +71,9 @@ public static class BitRemoveUtility
             }
         }
 
-        // Apply removals
+        // Apply removals carefully and track how much we actually removed
+        int actualRemoved = 0;
+
         foreach (var kvp in removalMap)
         {
             var grid = kvp.Key;
@@ -79,20 +81,38 @@ public static class BitRemoveUtility
 
             ulong current = grid.GetLocalBitValue();
             int safeRemove = Mathf.Min(toRemove, (int)current);
+
+            actualRemoved += safeRemove;
+
             grid.SetLocalBitValue((ulong)(current - (ulong)safeRemove));
-            grid.RefreshBitCharacters(); // ensure visual update
+            grid.RefreshBitCharacters();
         }
 
-        BitManager.Instance.RefreshGridBitrates(); // optional but safe
+        // Fix edge case: If rounding prevented full removal, remove the rest
+        int shortfall = bitsToRemove - actualRemoved;
 
-        ulong total = 0;
-        foreach (var grid in BitManager.Instance.activeGrids)
+        if (shortfall > 0)
         {
-            total += grid.GetLocalBitValue();
-        }
-        UnityEngine.Debug.Log($"[BitRemove] New total bits: {total} (ME)");
+            foreach (var grid in grids.OrderByDescending(g => g.GetLocalBitValue()))
+            {
+                if (shortfall <= 0) break;
 
-        BitManager.Instance.RecalculateTotalBits();
+                ulong current = grid.GetLocalBitValue();
+                int extraRemove = Mathf.Min(shortfall, (int)current);
+
+                grid.SetLocalBitValue((ulong)(current - (ulong)extraRemove));
+                grid.RefreshBitCharacters();
+
+                shortfall -= extraRemove;
+                actualRemoved += extraRemove;
+            }
+        }
+
+        // Debug safety check
+        if (actualRemoved != bitsToRemove)
+        {
+            UnityEngine.Debug.LogWarning($"[BitRemove] Warning! Expected to remove {bitsToRemove} but actually removed {actualRemoved} (ME)");
+        }
     }
 }
 
@@ -124,6 +144,16 @@ public class UpgradeMainButtonHandler : MonoBehaviour
         if (upgrade != null)
         {
             float upgradeCost = upgrade.GetUpgradeCost(upgrade.currentLevel);
+
+            // Apply CPU discount if applicable
+            if (upgrade.upgradeBranch == BranchType.CPU)
+            {
+                float cpuDiscount = CoreStats.Instance.GetStat("CPU Discount");
+                if (cpuDiscount > 0f)
+                {
+                    upgradeCost -= upgradeCost * (cpuDiscount / 100);
+                }
+            }
 
             ulong bits = BitManager.Instance.currentBits;
 

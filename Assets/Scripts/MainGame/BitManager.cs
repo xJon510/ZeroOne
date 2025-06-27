@@ -112,12 +112,14 @@ public class BitManager : MonoBehaviour
     {
         UnityEngine.Debug.Log($"[BitManager] Received stat change: {statName} = {newValue}");
 
-        if (statName == "FlatBitRate")
-        {
-            UpdateGlobalBitRate(newValue);
-            RefreshGridBitrates();
-            UnityEngine.Debug.Log($"[BitManager] Global BitRate updated to {newValue} via CoreStats");
-        }
+        float flat = CoreStats.Instance.GetStat("FlatBitRate");
+        float percent = CoreStats.Instance.GetStat("PercentBitRate");
+
+        float combinedRate = flat * (1f + percent / 100f);
+
+        UpdateGlobalBitRate(combinedRate);
+
+        UnityEngine.Debug.Log($"[BitManager] Global BitRate recalculated: {flat} flat + {percent}% = {combinedRate}");
     }
 
     public void AddToRunTime(float savedSeconds)
