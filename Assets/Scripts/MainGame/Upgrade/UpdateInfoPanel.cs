@@ -65,7 +65,6 @@ public class UpdateInfoPanel : MonoBehaviour
             }
 
             upgrade.upgradeCost = finalCost;
-            UnityEngine.Debug.Log($"(ME) rawCost:{rawCost} CPU Discount: {cpuDiscount} startcost: {upgrade.startCost} cost scale: {upgrade.upgradeCostScale} level: {upgrade.currentLevel}");
         }
 
         titleText.text = upgrade.upgradeName;

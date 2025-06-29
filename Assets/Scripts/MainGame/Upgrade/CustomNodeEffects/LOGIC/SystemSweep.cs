@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
 
 public class SystemSweep : MonoBehaviour
@@ -66,7 +65,7 @@ public class SystemSweep : MonoBehaviour
         var pool = UpgradeTrackerManager.Instance.GetAllValidUpgrades();
         pool.RemoveAll(r => r.upgradeComponent == thisUpgrade);
 
-        UnityEngine.Debug.Log($"[SystemSweep] Pool size after filtering: {pool.Count}");
+        Debug.Log($"[SystemSweep] Pool size after filtering: {pool.Count}");
 
         if (pool.Count == 0) return;
 
@@ -102,7 +101,21 @@ public class SystemSweep : MonoBehaviour
             target.upgradeComponent.ApplyUpgrade(coreStats);
         }
 
-        UnityEngine.Debug.Log($"[SystemSweep] Upgraded: {target.upgradeName} to level {target.upgradeComponent.currentLevel}");
+        Debug.Log($"[SystemSweep] Upgraded: {target.upgradeName} to level {target.upgradeComponent.currentLevel}");
+
+        // Also add to SweptCache if present
+        var sweptCache = FindObjectOfType<SweptCache>();
+        if (sweptCache != null)
+        {
+            int max = sweptCache.GetLevelCap();
+            float current = coreStats.GetStat("SweptCache");
+
+            if (current < max)
+            {
+                coreStats.AddStat("SweptCache", 1f, StatBranch.LOGIC);
+                Debug.Log($"[SystemSweep] +1 SweptCache => {current + 1} / {max}");
+            }
+        }
     }
 
     private void ApplyMilestoneEffects()

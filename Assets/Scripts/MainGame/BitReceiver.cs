@@ -7,23 +7,46 @@ public class BitReceiver : MonoBehaviour
 {
     [SerializeField] private TMP_Text totalBitsText;
     [SerializeField] private TMP_Text bitRateText;
+    [SerializeField] private TMP_Text overflowText;
 
     private void Update()
     {
         if (BitManager.Instance == null) return;
 
         // Format and display currentBits (e.g., 1,024 or 1.02K)
-        totalBitsText.text = $"Total Bits: {FormatNumber(BitManager.Instance.currentBits)}";
+        totalBitsText.text = $"Bits: {FormatNumber(BitManager.Instance.currentBits)}";
 
-        // Dynamically adjust bitrate display based on active grids
+        float flat = CoreStats.Instance.GetStat("FlatBitRate");
+        float swept = CoreStats.Instance.GetStat("SweptCache");
+        float percent = CoreStats.Instance.GetStat("PercentBitRate") / 100f;
+
+        float backendGlobal = (flat + swept) * (1 + percent);
+
         int activeGrids = BitManager.Instance.GetActiveGridCount();
         int totalGrids = BitManager.Instance.activeGrids.Count;
 
-        float actualBitRate = (activeGrids > 0)
-            ? BitManager.Instance.globalBitRate / totalGrids * activeGrids
+        // Simulate the same splitting your backend does:
+        float producingBitRate = (activeGrids > 0)
+            ? backendGlobal / totalGrids * activeGrids
             : 0f;
 
-        bitRateText.text = $"Bit Rate: {actualBitRate:F1} b/s\n({activeGrids}/{totalGrids})";
+        int missingGrids = totalGrids - activeGrids;
+
+        float lostCapacity = (backendGlobal / totalGrids) * missingGrids;
+
+        float overflowPercent = CoreStats.Instance.GetStat("% Overflow") / 100f;
+
+        float overflowBonus = lostCapacity * overflowPercent;
+
+        float finalBitRate = producingBitRate + overflowBonus;
+
+        bitRateText.text = $"Bit Rate: {finalBitRate:F1} b/s\n({activeGrids}/{totalGrids})";
+
+        if (overflowText != null)
+        {
+            float overflow = BitManager.Instance.GetOverflowBits();
+            overflowText.text = $"Overflow: {overflow:F0}";
+        }
     }
 
     private string FormatNumber(ulong value)

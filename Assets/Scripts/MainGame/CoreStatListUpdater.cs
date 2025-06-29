@@ -24,13 +24,34 @@ public class CoreStatListUpdater : MonoBehaviour
 
     private Dictionary<string, GameObject> statRowMap = new();
 
-    private readonly Dictionary<StatBranch, int> branchOrder = new()
-{
-    { StatBranch.BASIC, 0 },
-    { StatBranch.MEM, 1 },
-    { StatBranch.CPU, 2 },
-    { StatBranch.LOGIC, 3 }
+    private readonly StatBranch[] displayOrder = {
+    StatBranch.BASIC,
+    StatBranch.CPU,
+    StatBranch.LOGIC,
+    StatBranch.MEM
 };
+
+    void Start()
+    {
+        // Clear any stale map
+        spacerMap.Clear();
+
+        for (int i = 0; i < displayOrder.Length - 1; i++)
+        {
+            StatBranch branch = displayOrder[i];
+
+            // Find the pre-made spacer in the container by name
+            Transform found = statListContainer.Find($"Spacer_{branch}");
+            if (found != null)
+            {
+                spacerMap[branch] = found.gameObject;
+            }
+            else
+            {
+                Debug.LogWarning($"[CoreStatListUpdater] Missing prefab Spacer_{branch} in container!");
+            }
+        }
+    }
 
     void OnEnable()
     {
@@ -78,21 +99,30 @@ public class CoreStatListUpdater : MonoBehaviour
             if (rowImage != null)
                 rowImage.color = branchColor;
 
-            // Find the spacer in the list
+            // Find the branch for this stat
             StatBranch branch = CoreStats.Instance.GetAllStats()[statName].branch;
-            Transform spacer = statListContainer.Find($"Spacer_{branch}");
 
-            if (spacer != null)
+            // MEM: place at end without a spacer
+            if (branch == StatBranch.MEM)
             {
-                int spacerIndex = spacer.GetSiblingIndex();
                 newRow.transform.SetParent(statListContainer, false);
-                newRow.transform.SetSiblingIndex(spacerIndex);
+                newRow.transform.SetAsLastSibling();
             }
             else
             {
-                // fallback (should never happen if all spacers are placed)
-                newRow.transform.SetParent(statListContainer, false);
-                newRow.transform.SetAsLastSibling();
+                Transform spacer = statListContainer.Find($"Spacer_{branch}");
+                if (spacer != null)
+                {
+                    int spacerIndex = spacer.GetSiblingIndex();
+                    newRow.transform.SetParent(statListContainer, false);
+                    newRow.transform.SetSiblingIndex(spacerIndex);
+                }
+                else
+                {
+                    // fallback
+                    newRow.transform.SetParent(statListContainer, false);
+                    newRow.transform.SetAsLastSibling();
+                }
             }
 
             statRowMap[statName] = newRow;

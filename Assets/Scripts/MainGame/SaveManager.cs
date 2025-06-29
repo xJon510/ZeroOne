@@ -55,7 +55,9 @@ public class SaveManager : MonoBehaviour
         saveData.CoreStats = new CoreStatsSaveData
         {
             globalBitCount = BitManager.Instance.currentBits,
-            globalBitRate = BitManager.Instance.globalBitRate
+            globalBitRate = BitManager.Instance.globalBitRate,
+            sweptCache = CoreStats.Instance.GetStat("SweptCache"),
+            overflowBits = BitManager.Instance.GetOverflowBits()
         };
 
         // Upgrades

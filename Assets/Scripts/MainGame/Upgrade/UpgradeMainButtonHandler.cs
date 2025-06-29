@@ -8,10 +8,33 @@ public static class BitRemoveUtility
 {
     public static void RemoveBitsProportionally(int bitsToRemove)
     {
-        var grids = BitManager.Instance.activeGrids;
-        if (bitsToRemove <= 0 || grids.Count == 0) return;
+        if (bitsToRemove <= 0) return;
+
+        float overflowBits = BitManager.Instance.GetOverflowBits();
+        int overflowAvailable = Mathf.FloorToInt(overflowBits);
 
         int remaining = bitsToRemove;
+
+        if (overflowAvailable > 0)
+        {
+            if (overflowAvailable >= bitsToRemove)
+            {
+                // Fully covered by overflow
+                BitManager.Instance.overflowBits -= bitsToRemove;
+                Debug.Log($"[BitRemove] Removed {bitsToRemove} bits from overflow buffer only.");
+                return;
+            }
+            else
+            {
+                // Partial: drain all overflow first
+                BitManager.Instance.overflowBits -= overflowAvailable;
+                remaining -= overflowAvailable;
+                Debug.Log($"[BitRemove] Removed {overflowAvailable} bits from overflow, {remaining} left to remove from grids.");
+            }
+        }
+
+        var grids = BitManager.Instance.activeGrids;
+        if (bitsToRemove <= 0 || grids.Count == 0) return;
 
         // Filter out any grids with zero capacity
         grids = grids.FindAll(g => g.GetBitCapacity() > 0);
@@ -45,13 +68,13 @@ public static class BitRemoveUtility
         foreach (var grid in grids)
         {
             float ratio = weights[grid] / weightSum;
-            int planned = Mathf.FloorToInt(ratio * bitsToRemove);
+            int planned = Mathf.FloorToInt(ratio * remaining);
             removalMap[grid] = planned;
             totalPlanned += planned;
         }
 
         // Adjust to match exact amount
-        int diff = totalPlanned - bitsToRemove;
+        int diff = totalPlanned - remaining;
         if (diff != 0)
         {
             foreach (var grid in grids)
@@ -89,7 +112,7 @@ public static class BitRemoveUtility
         }
 
         // Fix edge case: If rounding prevented full removal, remove the rest
-        int shortfall = bitsToRemove - actualRemoved;
+        int shortfall = remaining - actualRemoved;
 
         if (shortfall > 0)
         {
@@ -109,9 +132,9 @@ public static class BitRemoveUtility
         }
 
         // Debug safety check
-        if (actualRemoved != bitsToRemove)
+        if (actualRemoved != remaining)
         {
-            UnityEngine.Debug.LogWarning($"[BitRemove] Warning! Expected to remove {bitsToRemove} but actually removed {actualRemoved} (ME)");
+            UnityEngine.Debug.LogWarning($"[BitRemove] Warning! Expected to remove {remaining} but actually removed {actualRemoved} (ME)");
         }
     }
 }

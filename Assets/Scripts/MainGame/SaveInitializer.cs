@@ -43,7 +43,19 @@ public class SaveInitializer : MonoBehaviour
         // Set Core Stats
         BitManager.Instance.currentBits = loadedState.CoreStats.globalBitCount;
         BitManager.Instance.globalBitRate = loadedState.CoreStats.globalBitRate;
+
+        if (loadedState.CoreStats.overflowBits > 0f)
+        {
+            BitManager.Instance.overflowBits = loadedState.CoreStats.overflowBits;
+        }
+
         BitManager.Instance.AddToRunTime(loadedState.playTime);
+
+        float loadedSweptCacheValue = loadedState.CoreStats.sweptCache;
+        if (loadedSweptCacheValue > 0f)
+        {
+            CoreStats.Instance.AddStat("SweptCache", loadedSweptCacheValue, StatBranch.LOGIC);
+        }
 
         // Apply Upgrades
         ApplyCPUUpgrades(loadedState.upgrades.cpu);

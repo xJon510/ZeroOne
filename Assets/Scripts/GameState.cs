@@ -19,6 +19,8 @@ public class CoreStatsSaveData
 {
     public ulong globalBitCount;
     public float globalBitRate;
+    public float sweptCache;
+    public float overflowBits;
 }
 
 [System.Serializable]

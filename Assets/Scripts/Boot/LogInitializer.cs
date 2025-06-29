@@ -40,7 +40,9 @@ public class LogInitializer : MonoBehaviour
 
   ""CoreStats"": {{
     ""globalBitCount"": 0,
-    ""globalBitRate"": 1.0
+    ""globalBitRate"": 1.0,
+    ""sweptCache"": 0.0,
+    ""overflowBits"": 0.0
   }},
 
   ""upgrades"": {{

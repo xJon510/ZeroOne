@@ -4,7 +4,7 @@ public class CycleTrim : MonoBehaviour
 {
     private BasicUpgrade upgrade;
 
-    private float lastApplied = -1f;
+    private float lastApplied = 0f;
 
     void Awake()
     {
@@ -15,6 +15,8 @@ public class CycleTrim : MonoBehaviour
     {
         if (upgrade != null)
         {
+            if (upgrade.currentLevel < 1) return;
+
             float newDiscount = Mathf.Min(upgrade.currentLevel, 25);
 
             if (!Mathf.Approximately(lastApplied, newDiscount))

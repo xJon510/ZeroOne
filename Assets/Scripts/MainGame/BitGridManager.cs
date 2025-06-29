@@ -64,6 +64,22 @@ public class BitGridManager : MonoBehaviour
             UpdateDebugText();
         }
 
+        if (IsAtGridCapacity())
+        {
+            float overflowPercent = CoreStats.Instance.GetStat("% Overflow") / 100f;
+
+            if (overflowPercent > 0f)
+            {
+                float lostBits = internalBitProgress;
+                float overflowBits = lostBits * overflowPercent;
+
+                BitManager.Instance.AddBufferedBits(overflowBits);
+            }
+
+            // Optional: Clamp the leftover progress to 0 since it's been handled
+            internalBitProgress = 0f;
+        }
+
         animTimer += Time.deltaTime;
         if (animTimer >= maxVisualRefreshRate)
         {

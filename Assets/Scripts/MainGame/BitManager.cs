@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using TMPro;
 using UnityEngine;
 
@@ -25,6 +24,8 @@ public class BitManager : MonoBehaviour
     public float globalBitRate = 1f; // Total bits to generate per tick (float for smoother distribution)
 
     public static event Action OnGameTick;
+
+    public float overflowBits;
 
     private void Start()
     {
@@ -90,6 +91,7 @@ public class BitManager : MonoBehaviour
     {
         globalBitRate = newRate;
         OnBitrateChanged?.Invoke(globalBitRate);
+        RefreshGridBitrates();
     }
 
     public int GetActiveGridCount()
@@ -110,16 +112,18 @@ public class BitManager : MonoBehaviour
 
     private void HandleStatChanged(string statName, float newValue)
     {
-        UnityEngine.Debug.Log($"[BitManager] Received stat change: {statName} = {newValue}");
+        Debug.Log($"[BitManager] Received stat change: {statName} = {newValue}");
 
         float flat = CoreStats.Instance.GetStat("FlatBitRate");
+        float swept = CoreStats.Instance.GetStat("SweptCache");
         float percent = CoreStats.Instance.GetStat("PercentBitRate");
 
-        float combinedRate = flat * (1f + percent / 100f);
+        float combinedFlat = flat + swept;
+        float combinedRate = combinedFlat * (1f + percent / 100f);
 
         UpdateGlobalBitRate(combinedRate);
 
-        UnityEngine.Debug.Log($"[BitManager] Global BitRate recalculated: {flat} flat + {percent}% = {combinedRate}");
+        Debug.Log($"[BitManager] Global BitRate recalculated: Flat:{flat} + Swept:{swept} + {percent}% = {combinedRate}");
     }
 
     public void AddToRunTime(float savedSeconds)
@@ -130,10 +134,21 @@ public class BitManager : MonoBehaviour
 
     public void RecalculateTotalBits()
     {
-        currentBits = 0;
+        currentBits = (ulong)Mathf.Floor(overflowBits);
         foreach (BitGridManager grid in activeGrids)
         {
             currentBits += grid.GetLocalBitValue();
         }
+    }
+
+    public void AddBufferedBits(float amount)
+    {
+        overflowBits += amount;
+        //Debug.Log($"[BitManager] Added {amount} overflow bits. Total bufferedBits: {overflowBits}");
+    }
+
+    public float GetOverflowBits()
+    {
+        return overflowBits;
     }
 }

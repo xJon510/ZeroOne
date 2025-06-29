@@ -25,9 +25,6 @@ public class CoreStats : MonoBehaviour
     {
         AddStat("FlatBitRate", 1f, StatBranch.BASIC);
         AddStat("PercentBitRate", 0f, StatBranch.BASIC);
-        AddStat("gridSync", 0f, StatBranch.MEM); // more defaults as you define them
-        AddStat("CPU Discount", -1f, StatBranch.CPU);        // more defaults as you define them
-        AddStat("dadgae", 0f, StatBranch.LOGIC); // more defaults as you define them
     }
 
     public static CoreStats Instance { get; private set; }
