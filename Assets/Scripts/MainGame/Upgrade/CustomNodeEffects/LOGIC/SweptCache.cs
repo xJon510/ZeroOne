@@ -30,6 +30,14 @@ public class SweptCache : MonoBehaviour
 
     public int GetLevelCap()
     {
-        return thisUpgrade != null ? thisUpgrade.UpgradeLevel() : 0;
+        if (thisUpgrade == null) return 0;
+
+        int level = thisUpgrade.UpgradeLevel();
+
+        if (level >= 100) return level * 4;
+        if (level >= 25) return level * 3;
+        if (level >= 5) return level * 2;
+
+        return level * 1; // Below level 5, base 1×
     }
 }

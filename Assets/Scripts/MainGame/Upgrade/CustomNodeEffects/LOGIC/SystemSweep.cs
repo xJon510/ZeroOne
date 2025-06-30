@@ -105,15 +105,22 @@ public class SystemSweep : MonoBehaviour
 
         // Also add to SweptCache if present
         var sweptCache = FindObjectOfType<SweptCache>();
+        float sweptAmount = 1f;
+
         if (sweptCache != null)
         {
             int max = sweptCache.GetLevelCap();
             float current = coreStats.GetStat("SweptCache");
 
+            if (upgradeLevel >= 50)
+            {
+                sweptAmount = 2f; // Milestone 50+
+            }
+
             if (current < max)
             {
-                coreStats.AddStat("SweptCache", 1f, StatBranch.LOGIC);
-                Debug.Log($"[SystemSweep] +1 SweptCache => {current + 1} / {max}");
+                coreStats.AddStat("SweptCache", sweptAmount, StatBranch.LOGIC);
+                Debug.Log($"[SystemSweep] +{sweptAmount} SweptCache => {current + sweptAmount} / {max}");
             }
         }
     }

@@ -1,10 +1,13 @@
+
 using UnityEngine;
 
 public class CycleTrim : MonoBehaviour
 {
     private BasicUpgrade upgrade;
+    private CoreStats coreStats;
 
-    private float lastApplied = 0f;
+    private float lastCPUDiscount = 0f;
+    private float lastFlatBitRate = 0f;
 
     void Awake()
     {
@@ -13,18 +16,51 @@ public class CycleTrim : MonoBehaviour
 
     void Update()
     {
-        if (upgrade != null)
+        if (upgrade.currentLevel < 1) return;
+
+        int level = upgrade.currentLevel;
+
+        // === Flat BitRate/Lvl ===
+        float flatBitRatePerLevel = GetFlatBitRatePerLevel(level);
+        float newFlatBitRate = flatBitRatePerLevel * level;
+
+        //Debug.Log($"[CycleTrim] flatBitRate increase: {newFlatBitRate}");
+
+        if (!Mathf.Approximately(newFlatBitRate, lastFlatBitRate))
         {
-            if (upgrade.currentLevel < 1) return;
+            float delta = newFlatBitRate - lastFlatBitRate;
+            CoreStats.Instance.AddStat("FlatBitRate", delta);
+            lastFlatBitRate = newFlatBitRate;
+        }
 
-            float newDiscount = Mathf.Min(upgrade.currentLevel, 25);
+        // === CPU Discount ===
+        int newMaxDiscount = GetMaxDiscount(level);
+        float newDiscount = Mathf.Min(level, newMaxDiscount);
 
-            if (!Mathf.Approximately(lastApplied, newDiscount))
-            {
-                float delta = newDiscount - lastApplied;
-                CoreStats.Instance.AddStat("CPU Discount", delta, StatBranch.CPU);
-                lastApplied = newDiscount;
-            }
+        //Debug.Log($"[CycleTrim] Discount increases: {newDiscount}");
+
+        if (!Mathf.Approximately(newDiscount, lastCPUDiscount))
+        {
+            float delta = newDiscount - lastCPUDiscount;
+            CoreStats.Instance.AddStat("CPU Discount", delta, StatBranch.CPU);
+            lastCPUDiscount = newDiscount;
         }
     }
+
+    private float GetFlatBitRatePerLevel(int level)
+    {
+        if (level >= 100) return 1f;     // Level 100 milestone
+        if (level >= 50) return 0.2f;    // Level 50 milestone
+        if (level >= 5) return 0.1f;     // Level 5 milestone
+        return 0f;                       // Below Level 5
+    }
+
+    private int GetMaxDiscount(int level)
+    {
+        if (level >= 100) return 50;
+        if (level >= 50) return 40;
+        if (level >= 25) return 35;
+        return 25;  // Base
+    }
+
 }
