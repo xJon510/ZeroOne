@@ -7,7 +7,6 @@ using TMPro;
 public class SaveInitializer : MonoBehaviour
 {
     public GameObject loadingScreen; // Assign in Inspector
-    public GameObject upgradeUI;
     public float minLoadingTime = 0f;
 
     private void Start()
@@ -76,7 +75,6 @@ public class SaveInitializer : MonoBehaviour
             yield return new WaitForSeconds(minLoadingTime - elapsed);
         }
 
-        if (upgradeUI != null) upgradeUI.SetActive(false);
         if (loadingScreen != null) loadingScreen.SetActive(false);
 
         UnityEngine.Debug.Log($"(ME) {loadedState.CoreStats.globalBitRate} ");

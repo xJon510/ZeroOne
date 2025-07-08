@@ -4,7 +4,6 @@ using UnityEngine;
 using TMPro;
 using System;
 using UnityEngine.UI;
-using System.Diagnostics;
 
 public class BootManager : MonoBehaviour
 {
@@ -169,9 +168,11 @@ public class BootManager : MonoBehaviour
     public float bootDuration = 5f;
 
     [Header("Post Boot")]
-    public GameObject postBootObject;
     public GameObject Bloom;
     public Texture2D defaultCursorTexture;
+
+    [Header("Audio")]
+    public MusicManager musicManager;
 
     private Vector2 hotspot = Vector2.zero;
 
@@ -252,16 +253,12 @@ public class BootManager : MonoBehaviour
 
         // Go fullscreen
         Screen.fullScreen = true;
-
-        // Activate post-boot object if assigned
-        if (postBootObject != null)
-        {
-            postBootObject.SetActive(true);
-            Bloom.SetActive(true);
-            SetDefaultCursor();
-        }
+        Bloom.SetActive(true);
+        SetDefaultCursor();
 
         LogInitializer.InitializeAllLogs();
+        Debug.Log("Calling PlayFirstSong()");
+        musicManager?.PlayFirstSong();
     }
 
     void GenerateBootQueue()
@@ -338,14 +335,12 @@ public class BootManager : MonoBehaviour
         titleScreenUI.blocksRaycasts = true;
 
         Screen.fullScreen = true;
+        Bloom.SetActive(true);
+        SetDefaultCursor();
 
-        if (postBootObject != null)
-        {
-            postBootObject.SetActive(true);
-            Bloom.SetActive(true);
-            SetDefaultCursor();
-        }
         LogInitializer.InitializeAllLogs();
+        Debug.Log("Calling PlayFirstSong()");
+        musicManager?.PlayFirstSong();
     }
 
     private void SkipToTitleImmediate()
@@ -359,13 +354,9 @@ public class BootManager : MonoBehaviour
         titleScreenUI.blocksRaycasts = true;
 
         Screen.fullScreen = true;
+        Bloom.SetActive(true);
+        SetDefaultCursor();
 
-        if (postBootObject != null)
-        {
-            postBootObject.SetActive(true);
-            Bloom.SetActive(true);
-            SetDefaultCursor();
-        }
         LogInitializer.InitializeAllLogs();
     }
 }
