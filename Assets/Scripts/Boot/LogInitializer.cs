@@ -28,7 +28,7 @@ public class LogInitializer : MonoBehaviour
         }
     }
 
-    static string GenerateDefaultSaveLog(int slotID)
+    public static string GenerateDefaultSaveLog(int slotID)
     {
         string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 

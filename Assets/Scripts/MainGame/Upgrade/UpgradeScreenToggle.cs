@@ -20,6 +20,16 @@ public class UpgradeScreenToggle : MonoBehaviour
     public Button openExitButton;
     public Button closeExitButton;
 
+    [Header("Achievement Panel")]
+    public CanvasGroup achievementUI;
+    public Button openAchievementButton;
+    public Button closeAchievementButton;
+
+    [Header("Credits Panel")]
+    public CanvasGroup creditsUI;
+    public Button openCreditsButton;
+    public Button closeCreditsButton;
+
     void Start()
     {
         if (openButton != null && closeButton != null)
@@ -40,6 +50,18 @@ public class UpgradeScreenToggle : MonoBehaviour
             openExitButton.onClick.AddListener(OpenExitUI);
             closeExitButton.onClick.AddListener(CloseExitUI);
         }
+
+        if (openAchievementButton != null && closeAchievementButton != null)
+        {
+            openAchievementButton.onClick.AddListener(OpenAchievementUI);
+            closeAchievementButton.onClick.AddListener(CloseAchievementUI);
+        }
+
+        if (openCreditsButton != null && closeCreditsButton != null)
+        {
+            openCreditsButton.onClick.AddListener(OpenCreditsUI);
+            closeCreditsButton.onClick.AddListener(CloseCreditsUI);
+        }
     }
 
     void Update()
@@ -58,6 +80,14 @@ public class UpgradeScreenToggle : MonoBehaviour
             if (exitUI != null && exitUI.alpha > 0)
             {
                 CloseExitUI();
+            }
+            if (achievementUI != null && achievementUI.alpha > 0)
+            {
+                CloseAchievementUI();
+            }
+            if (creditsUI != null && creditsUI.alpha > 0)
+            {
+                CloseCreditsUI();
             }
         }
     }
@@ -114,6 +144,38 @@ public class UpgradeScreenToggle : MonoBehaviour
         if (exitUI != null)
         {
             SetCanvasGroupState(exitUI, false);
+        }
+    }
+
+    void OpenAchievementUI()
+    {
+        if (achievementUI != null)
+        {
+            SetCanvasGroupState(achievementUI, true);
+        }
+    }
+
+    void CloseAchievementUI()
+    {
+        if (achievementUI != null)
+        {
+            SetCanvasGroupState(achievementUI, false);
+        }
+    }
+
+    void OpenCreditsUI()
+    {
+        if (creditsUI != null)
+        {
+            SetCanvasGroupState(creditsUI, true);
+        }
+    }
+
+    void CloseCreditsUI()
+    {
+        if (creditsUI != null)
+        {
+            SetCanvasGroupState(creditsUI, false);
         }
     }
 }

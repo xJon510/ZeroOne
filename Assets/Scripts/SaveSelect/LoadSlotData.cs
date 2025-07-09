@@ -24,7 +24,7 @@ public class LoadSlotData : MonoBehaviour
         public float playTime;
     }
 
-    void Start()
+    public void Start()
     {
         for (int i = 1; i <= 4; i++)
         {
