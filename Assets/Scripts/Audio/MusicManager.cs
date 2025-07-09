@@ -10,18 +10,31 @@ public class MusicManager : MonoBehaviour
     public Slider musicVolumeSlider;
     public Slider sfxVolumeSlider;
 
+    [Header("Volume Memory")]
+    public float savedMusicVolume = 0.5f;
+    public float savedSFXVolume = 0.5f;
+
     [Header("Playlist Settings")]
     public List<AudioClip> playlist = new List<AudioClip>();
     private List<AudioClip> originalPlaylist = new List<AudioClip>();
-    public AudioSource audioSource; // drag in Inspector!
+    public AudioSource musicSource; // drag in Inspector!
     public int currentSongIndex = 0;
 
     [Header("Playback Toggles")]
     public bool repeatSong = false;
     public bool shuffleSongs = false;
+    public bool isPaused = false;
+
+    private List<int> shufflePool = new List<int>();
 
     void Awake()
     {
+        if (FindObjectsOfType<MusicManager>().Length > 1)
+        {
+            Debug.Log("Duplicate MusicManager found — destroying this one.");
+            Destroy(gameObject);
+            return;
+        }
         DontDestroyOnLoad(gameObject);
 
         if (originalPlaylist.Count == 0 && playlist.Count > 0)
@@ -47,11 +60,11 @@ public class MusicManager : MonoBehaviour
 
     void Update()
     {
-        if (audioSource != null && !audioSource.isPlaying && audioSource.clip != null)
+        if (musicSource != null && !musicSource.isPlaying && musicSource.clip != null && !isPaused)
         {
             if (repeatSong)
             {
-                audioSource.Play(); // replay same song
+                musicSource.Play(); // replay same song
             }
             else
             {
@@ -62,25 +75,54 @@ public class MusicManager : MonoBehaviour
 
     void PlayNextSong()
     {
-        currentSongIndex++;
-        if (currentSongIndex >= playlist.Count) currentSongIndex = 0;
+        if (shuffleSongs)
+        {
+            // If pool is empty or null, refill it with all possible indexes EXCEPT the current one
+            if (shufflePool == null || shufflePool.Count == 0)
+            {
+                shufflePool = new List<int>();
+                for (int i = 0; i < playlist.Count; i++)
+                {
+                    if (i != currentSongIndex) // optional: avoid repeating same song immediately
+                        shufflePool.Add(i);
+                }
+            }
 
-        audioSource.clip = playlist[currentSongIndex];
-        audioSource.Play();
+            // Pick a random index from the pool
+            int randomIndexInPool = Random.Range(0, shufflePool.Count);
+            int nextIndex = shufflePool[randomIndexInPool];
+
+            // Remove it so we don't play it again until the pool resets
+            shufflePool.RemoveAt(randomIndexInPool);
+
+            currentSongIndex = nextIndex;
+        }
+        else
+        {
+            currentSongIndex++;
+            if (currentSongIndex >= playlist.Count) currentSongIndex = 0;
+        }
+
+        musicSource.clip = playlist[currentSongIndex];
+        musicSource.Play();
 
         UpdatePlayingObjects();
     }
 
-
-
     public void PlayFirstSong()
     {
-        if (playlist.Count > 0 && audioSource != null)
+        if (playlist.Count > 0 && musicSource != null)
         {
             Debug.Log("Playing First Song");
-            audioSource.clip = playlist[0];
-            audioSource.Play();
+            musicSource.clip = playlist[0];
+
+            OnMusicVolumeChanged(savedMusicVolume);
+
+            musicSource.Play();
             currentSongIndex = 0;
+
+            savedMusicVolume = 0.5f;
+            savedSFXVolume = 0.5f;
 
             UpdatePlayingObjects();
         }
@@ -130,6 +172,18 @@ public class MusicManager : MonoBehaviour
                 }
             }
 
+            if (musicVolumeSlider != null)
+            {
+                musicVolumeSlider.value = savedMusicVolume;
+                musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeChanged);
+            }
+
+            if (sfxVolumeSlider != null)
+            {
+                sfxVolumeSlider.value = savedSFXVolume;
+                sfxVolumeSlider.onValueChanged.AddListener(OnSFXVolumeChanged);
+            }
+
             Debug.Log("MusicManagerHelper found & UI connected!");
         }
         else
@@ -154,56 +208,38 @@ public class MusicManager : MonoBehaviour
         shuffleSongs = !shuffleSongs;
         Debug.Log($"Shuffle toggled: {shuffleSongs}");
 
+        if (shuffleSongs)
+        {
+            shufflePool = new List<int>();
+            for (int i = 0; i < playlist.Count; i++)
+            {
+                if (i != currentSongIndex)
+                    shufflePool.Add(i);
+            }
+        }
+
         if (FindObjectOfType<MusicManagerHelper>() is MusicManagerHelper helper && helper.shuffleButtonText != null)
         {
             helper.shuffleButtonText.text = $"Shuffle: [{(shuffleSongs ? "ON" : "OFF")}]";
         }
-
-        if (shuffleSongs)
-        {
-            ShufflePlaylist();
-        }
-        else
-        {
-            RestoreOriginalPlaylist();
-        }
-    }
-
-    private void ShufflePlaylist()
-    {
-        Debug.Log("Shuffling playlist!");
-        for (int i = playlist.Count - 1; i > 0; i--)
-        {
-            int j = Random.Range(0, i + 1);
-            (playlist[i], playlist[j]) = (playlist[j], playlist[i]);
-        }
-    }
-
-    private void RestoreOriginalPlaylist()
-    {
-        Debug.Log("Restoring original playlist order!");
-        playlist = new List<AudioClip>(originalPlaylist);
-
-        // Keep the current song playing
-        AudioClip currentClip = audioSource.clip;
-        currentSongIndex = playlist.IndexOf(currentClip);
-        if (currentSongIndex == -1) currentSongIndex = 0;
     }
 
     public void Play()
     {
-        if (audioSource != null && !audioSource.isPlaying)
+        if (musicSource != null && !musicSource.isPlaying)
         {
-            audioSource.Play();
+            musicSource.Play();
+            isPaused = false;
             Debug.Log("Playback resumed");
         }
     }
 
     public void Pause()
     {
-        if (audioSource != null && audioSource.isPlaying)
+        if (musicSource != null && musicSource.isPlaying)
         {
-            audioSource.Pause();
+            musicSource.Pause();
+            isPaused = true;
             Debug.Log("Playback paused");
         }
     }
@@ -216,12 +252,12 @@ public class MusicManager : MonoBehaviour
 
     public void Rewind()
     {
-        if (audioSource != null)
+        if (musicSource != null)
         {
-            if (audioSource.time > 10f)
+            if (musicSource.time > 10f)
             {
                 // If we're more than 10s in, restart the same song
-                audioSource.time = 0f;
+                musicSource.time = 0f;
                 Debug.Log("Rewinding to start of current song");
             }
             else
@@ -234,8 +270,8 @@ public class MusicManager : MonoBehaviour
                 if (currentSongIndex < 0)
                     currentSongIndex = playlist.Count - 1;
 
-                audioSource.clip = playlist[currentSongIndex];
-                audioSource.Play();
+                musicSource.clip = playlist[currentSongIndex];
+                musicSource.Play();
 
                 UpdatePlayingObjects();
             }
@@ -244,11 +280,11 @@ public class MusicManager : MonoBehaviour
 
     public void PlaySpecificSong(int index)
     {
-        if (index >= 0 && index < playlist.Count && audioSource != null)
+        if (index >= 0 && index < playlist.Count && musicSource != null)
         {
             currentSongIndex = index;
-            audioSource.clip = playlist[currentSongIndex];
-            audioSource.Play();
+            musicSource.clip = playlist[currentSongIndex];
+            musicSource.Play();
 
             Debug.Log($"Now playing: {playlist[currentSongIndex].name}");
             UpdatePlayingObjects();
@@ -268,5 +304,22 @@ public class MusicManager : MonoBehaviour
                 helper.playingObjects[i].SetActive(i == currentSongIndex);
             }
         }
+    }
+
+    public void OnMusicVolumeChanged(float newValue)
+    {
+        savedMusicVolume = newValue;
+
+        if (musicSource != null)
+            musicSource.volume = savedMusicVolume;
+
+        Debug.Log($"Music volume changed to: {savedMusicVolume}");
+    }
+
+    public void OnSFXVolumeChanged(float newValue)
+    {
+        savedSFXVolume = newValue;
+
+        Debug.Log($"SFX volume changed to: {savedSFXVolume}");
     }
 }

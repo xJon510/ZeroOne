@@ -173,6 +173,7 @@ public class BootManager : MonoBehaviour
 
     [Header("Audio")]
     public MusicManager musicManager;
+    public BootSFX bootSFX;
 
     private Vector2 hotspot = Vector2.zero;
 
@@ -229,16 +230,20 @@ public class BootManager : MonoBehaviour
 
             if (line.StartsWith("[SYS]")) // Assuming one-liners start like this
             {
+                bootSFX?.PlayOneLiner();
                 yield return new WaitForSeconds(oneLinerDelay);
                 elapsed += oneLinerDelay;
             }
             else
             {
+                bootSFX?.PlayNormalLine();
                 yield return new WaitForSeconds(normalLineDelay);
                 elapsed += normalLineDelay;
                 normalLineCount++;
             }
         }
+
+        bootSFX?.PlayBootComplete();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -323,6 +328,8 @@ public class BootManager : MonoBehaviour
     IEnumerator SkipToTitle()
     {
         consoleText.text += "\n\n[SYS] Boot sequence manually skipped.\n";
+
+        bootSFX?.PlayBootComplete();
 
         yield return new WaitForSeconds(1f); // slight delay for clarity
 

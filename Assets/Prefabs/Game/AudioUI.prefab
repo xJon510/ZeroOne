@@ -2884,6 +2884,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 271867508956831244}
+  - component: {fileID: 5139064319866750778}
   m_Layer: 5
   m_Name: Music
   m_TagString: Untagged
@@ -2912,6 +2913,21 @@ RectTransform:
   m_AnchoredPosition: {x: 370, y: 180}
   m_SizeDelta: {x: 650, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5139064319866750778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4120576602109041601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71b6ea74cb52a8428f68e9e6187146f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 123231157852648955}
+  targetText: {fileID: 1067541068674402806}
+  mutedColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &4415296350256898229
 GameObject:
   m_ObjectHideFlags: 0
@@ -4510,6 +4526,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2733097769357299696}
+  - component: {fileID: 8960661813650861179}
   m_Layer: 5
   m_Name: SFX
   m_TagString: Untagged
@@ -4538,6 +4555,21 @@ RectTransform:
   m_AnchoredPosition: {x: -370, y: 180}
   m_SizeDelta: {x: 650, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &8960661813650861179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5944108592557955410}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a71b6ea74cb52a8428f68e9e6187146f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 5835596688487703142}
+  targetText: {fileID: 6568949699885860188}
+  mutedColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &5984774034401448128
 GameObject:
   m_ObjectHideFlags: 0

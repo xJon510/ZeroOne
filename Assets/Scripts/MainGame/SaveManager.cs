@@ -2,6 +2,8 @@ using System.IO;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SaveManager : MonoBehaviour
 {
@@ -9,6 +11,10 @@ public class SaveManager : MonoBehaviour
 
     private string saveFolder => Application.persistentDataPath + "/saves/";
     private float autoSaveInterval = 60f;
+
+    [Header("Exit Actions")]
+    public Button exitToTitleButton;
+    public Button exitToDesktopButton;
 
     private void Awake()
     {
@@ -19,13 +25,17 @@ public class SaveManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        DontDestroyOnLoad(gameObject); // Optional, in case you want this to persist
     }
 
     private void Start()
     {
         StartCoroutine(AutoSaveTimer());
+
+        if (exitToTitleButton != null)
+            exitToTitleButton.onClick.AddListener(ExitToTitleScreen);
+
+        if (exitToDesktopButton != null)
+            exitToDesktopButton.onClick.AddListener(ExitToDesktop);
     }
 
     IEnumerator AutoSaveTimer()
@@ -98,5 +108,20 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(saveData, true);
         File.WriteAllText(path, json);
         UnityEngine.Debug.Log($"[SaveManager] Saved to {path}");
+    }
+
+    void ExitToTitleScreen()
+    {
+        SaveGame();
+        PlayerPrefs.SetInt("SkipBoot", 1);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene("TitleScreen"); // Replace with your actual title scene name
+        Debug.Log("Exit 2 TitleScreen");
+    }
+
+    void ExitToDesktop()
+    {
+        SaveGame();
+        Application.Quit();
     }
 }

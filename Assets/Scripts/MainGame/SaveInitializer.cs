@@ -84,9 +84,10 @@ public class SaveInitializer : MonoBehaviour
 
     void ApplyUpgrades(List<UpgradeSaveData> upgrades)
     {
+        BasicUpgrade[] allUpgrades = FindObjectsOfType<BasicUpgrade>(true);
+
         foreach (var upgrade in upgrades)
         {
-            BasicUpgrade[] allUpgrades = FindObjectsOfType<BasicUpgrade>(true);
             foreach (var u in allUpgrades)
             {
                 if (u.upgradeName == upgrade.name)

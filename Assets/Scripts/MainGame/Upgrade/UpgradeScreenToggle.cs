@@ -15,6 +15,11 @@ public class UpgradeScreenToggle : MonoBehaviour
     public Button openAudioButton;
     public Button closeAudioButton;
 
+    [Header("Exit Panel")]
+    public CanvasGroup exitUI;
+    public Button openExitButton;
+    public Button closeExitButton;
+
     void Start()
     {
         if (openButton != null && closeButton != null)
@@ -28,6 +33,12 @@ public class UpgradeScreenToggle : MonoBehaviour
         {
             openAudioButton.onClick.AddListener(OpenAudioUI);
             closeAudioButton.onClick.AddListener(CloseAudioUI);
+        }
+
+        if (openExitButton != null && closeExitButton != null)
+        {
+            openExitButton.onClick.AddListener(OpenExitUI);
+            closeExitButton.onClick.AddListener(CloseExitUI);
         }
     }
 
@@ -43,6 +54,10 @@ public class UpgradeScreenToggle : MonoBehaviour
             if (audioUI != null && audioUI.alpha > 0)
             {
                 CloseAudioUI();
+            }
+            if (exitUI != null && exitUI.alpha > 0)
+            {
+                CloseExitUI();
             }
         }
     }
@@ -84,5 +99,21 @@ public class UpgradeScreenToggle : MonoBehaviour
         cg.alpha = visible ? 1 : 0;
         cg.interactable = visible;
         cg.blocksRaycasts = visible;
+    }
+
+    void OpenExitUI()
+    {
+        if (exitUI != null)
+        {
+            SetCanvasGroupState(exitUI, true);
+        }
+    }
+
+    void CloseExitUI()
+    {
+        if (exitUI != null)
+        {
+            SetCanvasGroupState(exitUI, false);
+        }
     }
 }
