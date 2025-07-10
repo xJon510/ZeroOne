@@ -30,6 +30,9 @@ public class UpgradeScreenToggle : MonoBehaviour
     public Button openCreditsButton;
     public Button closeCreditsButton;
 
+    [Header("UI SFX")]
+    public ButtonSFX buttonSFX;
+
     void Start()
     {
         if (openButton != null && closeButton != null)
@@ -68,26 +71,38 @@ public class UpgradeScreenToggle : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            bool anyClosed = false;
+
             if (upgradeUI != null && upgradeUI.alpha > 0)
             {
                 CloseUpgradeUI();
+                anyClosed = true;
             }
 
             if (audioUI != null && audioUI.alpha > 0)
             {
                 CloseAudioUI();
+                anyClosed = true;
             }
             if (exitUI != null && exitUI.alpha > 0)
             {
                 CloseExitUI();
+                anyClosed = true;
             }
             if (achievementUI != null && achievementUI.alpha > 0)
             {
                 CloseAchievementUI();
+                anyClosed = true;
             }
             if (creditsUI != null && creditsUI.alpha > 0)
             {
                 CloseCreditsUI();
+                anyClosed = true;
+            }
+
+            if (anyClosed && buttonSFX != null)
+            {
+                buttonSFX.PlayButtonDown();
             }
         }
     }

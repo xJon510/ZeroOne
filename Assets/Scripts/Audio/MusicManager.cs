@@ -56,6 +56,7 @@ public class MusicManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         TryFindHelper();
+        UpdatePlayingObjects();
     }
 
     void Update()

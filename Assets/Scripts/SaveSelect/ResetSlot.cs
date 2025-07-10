@@ -12,7 +12,8 @@ public class ResetSlot : MonoBehaviour
     public Button confirmButton;
     public Button cancelButton;
 
-    [Header("Other")]
+    [Header("Hide Reset Button")]
+    public HideResetButton hideResetButton;
     public LoadSlotData loadSlotData; // Reference to your LoadSlotData
 
     private string savePath => Application.persistentDataPath + "/saves/";
@@ -49,6 +50,9 @@ public class ResetSlot : MonoBehaviour
         // Refresh the slot UI
         if (loadSlotData != null)
             loadSlotData.Start(); // re-run Start to reload slot meta
+
+        if (hideResetButton != null)
+            hideResetButton.CheckSlotStatus();
 
         CancelReset();
     }

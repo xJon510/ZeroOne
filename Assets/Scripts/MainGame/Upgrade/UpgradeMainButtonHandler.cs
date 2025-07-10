@@ -152,6 +152,8 @@ public class UpgradeMainButtonHandler : MonoBehaviour
 
     public BasicUpgrade upgrade;
 
+    public CantAffordSFX cantAffordSFX;
+
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(AttemptUpgrade);
@@ -193,6 +195,12 @@ public class UpgradeMainButtonHandler : MonoBehaviour
                 {
                     shakeTarget.TriggerShake();
                 }
+
+                if (cantAffordSFX != null)
+                {
+                    cantAffordSFX.PlayCantAfford();
+                }
+
                 return;
             }
 
@@ -225,6 +233,11 @@ public class UpgradeMainButtonHandler : MonoBehaviour
             if (upgrade.upgradeInfo != null)
             {
                 UpdateInfoPanel.Instance.DisplayUpgradeInfo(upgrade.upgradeInfo);
+            }
+
+            if (cantAffordSFX != null)
+            {
+                cantAffordSFX.PlayNormalClick();
             }
 
             // Save :P
