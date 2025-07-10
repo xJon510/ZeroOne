@@ -959,7 +959,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 9007950011347642432, guid: 591235158968b9b439c824b1d5990103, type: 3}
   m_PrefabInstance: {fileID: 1004605296751125545}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 506398973}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 22d9130bfab877647acd02f912c8c963, type: 3}
@@ -1025,6 +1025,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &506398973 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1657063016643586417, guid: 591235158968b9b439c824b1d5990103, type: 3}
+  m_PrefabInstance: {fileID: 1004605296751125545}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &506398976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506398973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3609c26c0072b794d816839fe893a893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxManagers:
+  - {fileID: 1345449788}
+  - {fileID: 506398973}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -4094,10 +4114,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -765
       objectReference: {fileID: 0}
-    - target: {fileID: 1777243629530738393, guid: 8c26f1be099b5ba4ab50aa78f727feb5, type: 3}
-      propertyPath: m_Alpha
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1785802897665455760, guid: 8c26f1be099b5ba4ab50aa78f727feb5, type: 3}
       propertyPath: m_Name
       value: AudioUI
@@ -4604,11 +4620,18 @@ PrefabInstance:
     - target: {fileID: 9007950011347642432, guid: 591235158968b9b439c824b1d5990103, type: 3}
       propertyPath: buttons.Array.data[24]
       value: 
-      objectReference: {fileID: 1840972933}
+      objectReference: {fileID: 1370965541}
+    - target: {fileID: 9007950011347642432, guid: 591235158968b9b439c824b1d5990103, type: 3}
+      propertyPath: buttons.Array.data[25]
+      value: 
+      objectReference: {fileID: 1370965541}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1657063016643586417, guid: 591235158968b9b439c824b1d5990103, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 506398976}
   m_SourcePrefab: {fileID: 100100000, guid: 591235158968b9b439c824b1d5990103, type: 3}
 --- !u!1001 &3999417727824131263
 PrefabInstance:

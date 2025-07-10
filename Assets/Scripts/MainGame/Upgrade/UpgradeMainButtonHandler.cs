@@ -148,8 +148,6 @@ public class UpgradeMainButtonHandler : MonoBehaviour
 
     public float flashDuration = 0.3f;
 
-    private Color originalColor;
-
     public BasicUpgrade upgrade;
 
     public CantAffordSFX cantAffordSFX;
@@ -157,7 +155,6 @@ public class UpgradeMainButtonHandler : MonoBehaviour
     private void Start()
     {
         GetComponent<Button>().onClick.AddListener(AttemptUpgrade);
-        if (costText != null) originalColor = costText.color;
     }
 
     private void AttemptUpgrade()
@@ -252,10 +249,32 @@ public class UpgradeMainButtonHandler : MonoBehaviour
 
     private IEnumerator FlashCostText()
     {
-        Color currentColor = costText.color;
-
         costText.color = errorColor;
         yield return new WaitForSeconds(flashDuration);
-        costText.color = currentColor;
+
+        // Get the currently selected upgrade's path color
+        if (UpdateInfoPanel.CurrentSelectedUpgrade != null)
+        {
+            var branchType = UpdateInfoPanel.CurrentSelectedUpgrade.upgradeBranch;
+
+            // Convert BranchType -> UpgradeBranch
+            UpgradeBranch convertedBranch = UpgradeBranch.CPU;
+            switch (branchType)
+            {
+                case BranchType.CPU:
+                    convertedBranch = UpgradeBranch.CPU; break;
+                case BranchType.MEM:
+                    convertedBranch = UpgradeBranch.MEM; break;
+                case BranchType.LOGIC:
+                    convertedBranch = UpgradeBranch.LOGIC; break;
+            }
+
+            Color branchColor = UpdateInfoPanel.Instance.GetBranchColor(convertedBranch);
+            costText.color = branchColor;
+        }
+        else
+        {
+            costText.color = Color.white; // fallback
+        }
     }
 }

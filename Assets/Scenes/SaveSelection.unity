@@ -594,6 +594,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1657063016643586417, guid: 591235158968b9b439c824b1d5990103, type: 3}
       insertIndex: -1
       addedObject: {fileID: 187555323}
+    - targetCorrespondingSourceObject: {fileID: 1657063016643586417, guid: 591235158968b9b439c824b1d5990103, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 187555324}
   m_SourcePrefab: {fileID: 100100000, guid: 591235158968b9b439c824b1d5990103, type: 3}
 --- !u!1 &187555319 stripped
 GameObject:
@@ -621,6 +624,20 @@ MonoBehaviour:
   buttonDownClip: {fileID: 8300000, guid: 1367bcde86699104ebe7ee1407c8c8f2, type: 3}
   sfxSource: {fileID: 187555322}
   errorButton: {fileID: 1399165149}
+--- !u!114 &187555324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187555319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3609c26c0072b794d816839fe893a893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxManagers:
+  - {fileID: 187555319}
 --- !u!1 &209752519
 GameObject:
   m_ObjectHideFlags: 0

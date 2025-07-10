@@ -1466,6 +1466,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1657063016643586417, guid: 591235158968b9b439c824b1d5990103, type: 3}
       insertIndex: -1
       addedObject: {fileID: 760973666}
+    - targetCorrespondingSourceObject: {fileID: 1657063016643586417, guid: 591235158968b9b439c824b1d5990103, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 760973667}
   m_SourcePrefab: {fileID: 100100000, guid: 591235158968b9b439c824b1d5990103, type: 3}
 --- !u!114 &19792760 stripped
 MonoBehaviour:
@@ -19990,6 +19993,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5888866458424547907, guid: b89cd2d33d8ca444bbf8409c482fe8dc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1322228515}
+    - targetCorrespondingSourceObject: {fileID: 5888866458424547907, guid: b89cd2d33d8ca444bbf8409c482fe8dc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1322228516}
   m_SourcePrefab: {fileID: 100100000, guid: b89cd2d33d8ca444bbf8409c482fe8dc, type: 3}
 --- !u!1 &454154713
 GameObject:
@@ -28378,10 +28384,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afa607c1ac3eb54ca2e35923feca88c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cantAffordClip: {fileID: 8300000, guid: 3bd2d99cc0fca844cb7435134bf0067c, type: 3}
+  cantAffordClip: {fileID: 8300000, guid: e81caf776be05bb4aaa999e44c0f36b5, type: 3}
   buttonDownClip: {fileID: 8300000, guid: 1367bcde86699104ebe7ee1407c8c8f2, type: 3}
   sfxSource: {fileID: 760973664}
   mainUpgradeButton: {fileID: 1606237846}
+--- !u!114 &760973667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 760973663}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3609c26c0072b794d816839fe893a893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxManagers:
+  - {fileID: 760973663}
 --- !u!1 &765715027
 GameObject:
   m_ObjectHideFlags: 0
@@ -47383,6 +47403,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1322228516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77830005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9d10517afb4b5746a8a1a1d3a988941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1325231129
 GameObject:
   m_ObjectHideFlags: 0
