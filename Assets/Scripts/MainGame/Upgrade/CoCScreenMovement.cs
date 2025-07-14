@@ -7,6 +7,7 @@ public class CoCScreenMovement : MonoBehaviour
 {
     [SerializeField] private RectTransform upgradeHolder;
     [SerializeField] private RectTransform boundsRect; // This should be UpgradeBkRnd
+    [SerializeField] private CanvasGroup upgradeUI;
 
     public float sensitvity = 2.5f;
 
@@ -15,6 +16,12 @@ public class CoCScreenMovement : MonoBehaviour
 
     void Update()
     {
+        if (upgradeUI != null && upgradeUI.alpha == 0f)
+        {
+            // UI is hidden, skip drag!
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Input.mousePosition;

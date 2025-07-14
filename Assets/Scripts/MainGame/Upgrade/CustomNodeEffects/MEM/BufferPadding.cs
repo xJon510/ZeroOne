@@ -51,7 +51,7 @@ public class BufferPadding : MonoBehaviour
             coreStats.AddStat("% Overflow", totalOverflowPercent, StatBranch.MEM);
             lastAppliedAmount = totalOverflowPercent;
 
-            Debug.Log($"[BufferPadding] Applied {totalOverflowPercent}% overflow at level {level}");
+            // Debug.Log($"[BufferPadding] Applied {totalOverflowPercent}% overflow at level {level}");
         }
     }
 

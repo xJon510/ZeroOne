@@ -6,6 +6,8 @@ public class ThreadWeaver : MonoBehaviour
     private BasicUpgrade upgrade;
 
     private float lastBonus = 0f;
+    private int lastCpuNodeCount = 0;
+    private bool hasLoggedUnlock = false;
 
     void Awake()
     {
@@ -46,7 +48,26 @@ public class ThreadWeaver : MonoBehaviour
             float delta = newBonus - lastBonus;
             CoreStats.Instance.AddStat("PercentBitRate", delta);
             lastBonus = newBonus;
-            Debug.Log($"(ME) {delta}");
+            //Debug.Log($"(ME) {delta}");
+        }
+
+        if (!hasLoggedUnlock && cpuNodeCount > 0)
+        {
+            LogPrinter.Instance?.PrintLog($"Thread Weaver Bonus Unlocked: Currently Tracking {cpuNodeCount} CPU Nodes.", BranchType.CPU);
+            hasLoggedUnlock = true;
+            lastCpuNodeCount = cpuNodeCount;
+        }
+
+        // If node count increased, log each new one
+        if (cpuNodeCount > lastCpuNodeCount)
+        {
+            int newNodes = cpuNodeCount - lastCpuNodeCount;
+            for (int i = 0; i < newNodes; i++)
+            {
+                LogPrinter.Instance?.PrintLog($"Thread Weaver Detected New CPU Node: Total Is Now {cpuNodeCount}", BranchType.CPU);
+            }
+
+            lastCpuNodeCount = cpuNodeCount;
         }
     }
 

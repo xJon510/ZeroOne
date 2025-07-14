@@ -32,7 +32,9 @@ public class ByteInjector : MonoBehaviour
             {
                 float delta = permanentBonus - lastPermanentBonus;
                 coreStats.AddStat("FlatBitRate", delta);
-                Debug.Log($"[ByteInjector] Permanent +{delta} BitRate applied (Lvl {level})");
+                //Debug.Log($"[ByteInjector] Permanent +{delta} BitRate applied (Lvl {level})");
+                LogPrinter.Instance?.PrintLog($"Byte Injector Permanent +{activeBoostAmount} BitRate", BranchType.CPU);
+
                 lastPermanentBonus = permanentBonus;
             }
 
@@ -49,7 +51,8 @@ public class ByteInjector : MonoBehaviour
             activeBoostAmount = GetBonusPerLevel(level) * level;
 
             coreStats.AddStat("FlatBitRate", activeBoostAmount);
-            Debug.Log($"[ByteInjector] Injected +{activeBoostAmount} BitRate for {GetBoostDuration(level)}s (Lvl {level})");
+            //Debug.Log($"[ByteInjector] Injected +{activeBoostAmount} BitRate for {GetBoostDuration(level)}s (Lvl {level})");
+            LogPrinter.Instance?.PrintLog($"Byte Injector INJECTED {activeBoostAmount} BitRate for {GetBoostDuration(level)}s", BranchType.CPU);
 
             boostTimer = GetBoostDuration(level);
             isBoostActive = true;
@@ -63,7 +66,7 @@ public class ByteInjector : MonoBehaviour
             if (boostTimer <= 0f)
             {
                 coreStats.AddStat("FlatBitRate", -activeBoostAmount);
-                Debug.Log($"[ByteInjector] Removed +{activeBoostAmount} BitRate");
+                //Debug.Log($"[ByteInjector] Removed +{activeBoostAmount} BitRate");
 
                 isBoostActive = false;
                 activeBoostAmount = 0f;

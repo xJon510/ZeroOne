@@ -37,6 +37,8 @@ public class BitGridManager : MonoBehaviour
     private static readonly Color TextGreen = new Color32(0x6D, 0xD2, 0x7A, 0xFF);
     private static readonly Color TextRed = new Color32(0xD2, 0x73, 0x6E, 0xFF);
 
+    private bool hasLoggedFull = false;
+
     private void Start()
     {
         // Automatically gather all TMP_Texts under this object
@@ -66,6 +68,12 @@ public class BitGridManager : MonoBehaviour
 
         if (IsAtGridCapacity())
         {
+            if (!hasLoggedFull)
+            {
+                LogPrinter.Instance.PrintLog($"Grid '{gameObject.name}' has reached full capacity!", BranchType.CPU, isError: true);
+                hasLoggedFull = true;
+            }
+
             float overflowPercent = CoreStats.Instance.GetStat("% Overflow") / 100f;
 
             if (overflowPercent > 0f)
@@ -79,8 +87,12 @@ public class BitGridManager : MonoBehaviour
             // Optional: Clamp the leftover progress to 0 since it's been handled
             internalBitProgress = 0f;
         }
+        else
+        {
+            hasLoggedFull = false;
+        }
 
-        animTimer += Time.deltaTime;
+            animTimer += Time.deltaTime;
         if (animTimer >= maxVisualRefreshRate)
         {
             animTimer = 0f;

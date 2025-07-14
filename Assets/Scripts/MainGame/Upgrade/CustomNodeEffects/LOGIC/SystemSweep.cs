@@ -38,7 +38,8 @@ public class SystemSweep : MonoBehaviour
         ApplyMilestoneEffects();
 
         // Calculate cooldown
-        sweepCooldown = Mathf.Clamp(45f - (0.25f * upgradeLevel), 15f, 45f);
+        float milestoneBonus = (upgradeLevel >= 5) ? -5f : 0f;
+        sweepCooldown = Mathf.Clamp(45f - (0.25f * upgradeLevel) + milestoneBonus, 15f, 45f);
 
         if (timeUntilNextSweep <= 0f)
         {
@@ -102,6 +103,7 @@ public class SystemSweep : MonoBehaviour
         }
 
         Debug.Log($"[SystemSweep] Upgraded: {target.upgradeName} to level {target.upgradeComponent.currentLevel}");
+        LogPrinter.Instance.PrintLog($"[SystemSweep] Upgraded: {target.upgradeName} to level {target.upgradeComponent.currentLevel}", BranchType.LOGIC);
 
         // Also add to SweptCache if present
         var sweptCache = FindObjectOfType<SweptCache>();
@@ -121,22 +123,13 @@ public class SystemSweep : MonoBehaviour
             {
                 coreStats.AddStat("SweptCache", sweptAmount, StatBranch.LOGIC);
                 Debug.Log($"[SystemSweep] +{sweptAmount} SweptCache => {current + sweptAmount} / {max}");
+                LogPrinter.Instance.PrintLog($"[SweptCache] +{sweptAmount} -> {current + sweptAmount} / {max}", BranchType.LOGIC);
             }
         }
     }
 
     private void ApplyMilestoneEffects()
     {
-        // Cooldown Milestone (5+)
-        if (upgradeLevel >= 5)
-        {
-            sweepCooldown -= 5f;
-        }
-
-        // Unlock Next Tier (10+) - Placeholder
-        //if (upgradeLevel >= 25) 
-        //UnlockNextTier();
-
         // +2 every 5th sweep (25+)
         if (upgradeLevel >= 25)
             EnableBonusSweeps();

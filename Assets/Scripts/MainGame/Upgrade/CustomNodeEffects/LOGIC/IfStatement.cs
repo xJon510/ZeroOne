@@ -8,6 +8,7 @@ public class IfStatement : MonoBehaviour
     private CoreStats coreStats;
 
     private float lastPercentBitRate = 0f;
+    private bool lastWasIfBonus = false;
 
     void Start()
     {
@@ -38,6 +39,7 @@ public class IfStatement : MonoBehaviour
         float elseBonusPerLevel = GetElseBonus(level);
 
         float percentPerLevel = (storagePercent < ifThreshold) ? ifBonusPerLevel : elseBonusPerLevel;
+        bool isIfBonusNow = (storagePercent < ifThreshold);
         float newPercentBitRate = percentPerLevel * level;
 
         if (!Mathf.Approximately(newPercentBitRate, lastPercentBitRate))
@@ -46,16 +48,24 @@ public class IfStatement : MonoBehaviour
             CoreStats.Instance.AddStat("PercentBitRate", delta);
             lastPercentBitRate = newPercentBitRate;
 
-            Debug.Log($"[IfStatement] Storage: {storagePercent:F1}% | IF < {ifThreshold}% -> +{percentPerLevel}%/Lvl | Total Bonus: {newPercentBitRate}%");
+            // Debug.Log($"[IfStatement] Storage: {storagePercent:F1}% | IF < {ifThreshold}% -> +{percentPerLevel}%/Lvl | Total Bonus: {newPercentBitRate}%");
+        }
+
+        if (isIfBonusNow != lastWasIfBonus)
+        {
+            string stateText = isIfBonusNow ? $"IF < {ifThreshold}% Applied" : $"ELSE >= {ifThreshold}% Applied";
+
+            LogPrinter.Instance?.PrintLog($"If Statement Bonus: {stateText}",BranchType.CPU);
+
+            lastWasIfBonus = isIfBonusNow;
         }
     }
 
     private float GetThreshold(int level)
     {
-        if (level >= 100) return 70f;
-        if (level >= 50) return 50f;
-        if (level >= 5) return 30f;
-        return 50f;
+        if (level >= 50) return 70f;
+        if (level >= 5) return 50f;
+        return 30f;
     }
 
     private float GetIfBonus(int level)

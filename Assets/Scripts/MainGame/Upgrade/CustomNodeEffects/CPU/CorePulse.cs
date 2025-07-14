@@ -17,6 +17,7 @@ public class CorePulse : MonoBehaviour
     private float lastStorageRatio = 0f;
 
     private bool initialized = false;
+    private bool corePulseBonusActive = false;
 
     private void Update()
     {
@@ -35,6 +36,17 @@ public class CorePulse : MonoBehaviour
             if (previouslyEligible != currentlyEligible)
             {
                 RecalculateFlatBitRate();
+
+                if (currentlyEligible && !corePulseBonusActive)
+                {
+                    LogPrinter.Instance?.PrintLog("Core Pulse Bonus Is ACTIVATED", BranchType.CPU);
+                    corePulseBonusActive = true;
+                }
+                else if (!currentlyEligible && corePulseBonusActive)
+                {
+                    LogPrinter.Instance?.PrintLog("Core Pulse Bonus Is DE-ACTIVATED", BranchType.CPU);
+                    corePulseBonusActive = false;
+                }
             }
 
             lastStorageRatio = currentRatio;

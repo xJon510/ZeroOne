@@ -35,11 +35,13 @@ public class HeatSink : MonoBehaviour
             activeBonusAmount = GetBonusPerLevel(level) * level;
 
             coreStats.AddStat("PercentBitRate", activeBonusAmount);
-            UnityEngine.Debug.Log($"[HeatSink] Applied +{activeBonusAmount}% BitRate for {buffDuration}s (Lvl {level})");
+            // UnityEngine.Debug.Log($"[HeatSink] Applied +{activeBonusAmount}% BitRate for {buffDuration}s (Lvl {level})");
 
             buffTimer = buffDuration;
             isBuffActive = true;
             lastIdleMilestone += 10f;
+
+            LogPrinter.Instance?.PrintLog($"Heat Sink Bonus Is ACTIVATED For {buffTimer}s",BranchType.CPU);
         }
 
         // Countdown and remove buff after 5s
@@ -49,7 +51,7 @@ public class HeatSink : MonoBehaviour
             if (buffTimer <= 0f)
             {
                 coreStats.AddStat("PercentBitRate", -activeBonusAmount);
-                UnityEngine.Debug.Log($"[HeatSink] Removed +{activeBonusAmount}% BitRate");
+                // UnityEngine.Debug.Log($"[HeatSink] Removed +{activeBonusAmount}% BitRate");
 
                 isBuffActive = false;
             }

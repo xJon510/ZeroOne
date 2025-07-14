@@ -46,6 +46,7 @@ public class BasicUpgrade : MonoBehaviour
     public Animator upgradeAnimator;
 
     private bool levelTenUnlocked = false;
+    private bool printLevelUnlock = false;
 
     public float GetUpgradeCost(int level)
     {
@@ -146,6 +147,11 @@ public class BasicUpgrade : MonoBehaviour
             upgradeInfo.passiveEffect = statGainPerLevel * (currentLevel); // total effect
         }
 
+        if (upgradeInfo.currentLevel > 1)
+        {
+            LogPrinter.Instance.PrintLog($"Upgraded {upgradeName} to Level {currentLevel}", upgradeBranch);
+        }
+
         Debug.Log($"[BasicUpgrade] {upgradeName} upgraded to level {currentLevel}. Cost now: {upgradeInfo.upgradeCost}");
     }
 
@@ -171,6 +177,12 @@ public class BasicUpgrade : MonoBehaviour
         else
         {
             Debug.LogWarning($"[UnlockLevelOne] No Animator assigned to {upgradeName}");
+        }
+
+        if (!printLevelUnlock)
+        {
+            LogPrinter.Instance.PrintLog($"Unlocked {upgradeName}", upgradeBranch);
+            printLevelUnlock = true;
         }
     }
 

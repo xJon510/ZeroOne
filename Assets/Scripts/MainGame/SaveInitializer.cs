@@ -80,6 +80,9 @@ public class SaveInitializer : MonoBehaviour
         UnityEngine.Debug.Log($"(ME) {loadedState.CoreStats.globalBitRate} ");
 
         UnityEngine.Debug.Log("[SaveInitializer] Save loaded successfully.");
+
+        LogPrinter.Instance.ClearLog();
+        LogPrinter.Instance.PrintLog($"Save Slot {selectedSlot} loaded successfully.",BranchType.MEM);
     }
 
     void ApplyUpgrades(List<UpgradeSaveData> upgrades)
