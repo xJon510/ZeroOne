@@ -175,6 +175,9 @@ public class BootManager : MonoBehaviour
     public MusicManager musicManager;
     public BootSFX bootSFX;
 
+    [Header("Tutorial UI")]
+    public CanvasGroup tutorialUI;
+
     private Vector2 hotspot = Vector2.zero;
 
     private List<string> bootQueue = new List<string>();
@@ -255,6 +258,11 @@ public class BootManager : MonoBehaviour
         titleScreenUI.alpha = 1;
         titleScreenUI.interactable = true;
         titleScreenUI.blocksRaycasts = true;
+
+        if (ShouldShowTutorial())
+        {
+            ShowTutorialUI();
+        }
 
         // Go fullscreen
         Screen.fullScreen = true;
@@ -341,6 +349,11 @@ public class BootManager : MonoBehaviour
         titleScreenUI.interactable = true;
         titleScreenUI.blocksRaycasts = true;
 
+        if (ShouldShowTutorial())
+        {
+            ShowTutorialUI();
+        }
+
         Screen.fullScreen = true;
         Bloom.SetActive(true);
         SetDefaultCursor();
@@ -365,5 +378,17 @@ public class BootManager : MonoBehaviour
         SetDefaultCursor();
 
         LogInitializer.InitializeAllLogs();
+    }
+
+    private void ShowTutorialUI()
+    {
+        tutorialUI.alpha = 1;
+        tutorialUI.interactable = true;
+        tutorialUI.blocksRaycasts = true;
+    }
+
+    private bool ShouldShowTutorial()
+    {
+        return PlayerPrefs.GetInt("TutorialSeen", 0) == 0;
     }
 }

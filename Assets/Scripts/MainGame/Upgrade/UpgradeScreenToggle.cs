@@ -30,6 +30,10 @@ public class UpgradeScreenToggle : MonoBehaviour
     public Button openCreditsButton;
     public Button closeCreditsButton;
 
+    [Header("Tutorial Panel")]
+    public CanvasGroup tutorialUI;
+    public Button closetutorialButton;
+
     [Header("UI SFX")]
     public ButtonSFX buttonSFX;
 
@@ -65,6 +69,11 @@ public class UpgradeScreenToggle : MonoBehaviour
             openCreditsButton.onClick.AddListener(OpenCreditsUI);
             closeCreditsButton.onClick.AddListener(CloseCreditsUI);
         }
+
+        if (closetutorialButton != null)
+        {
+            closetutorialButton.onClick.AddListener(CloseTutorialUI);
+        }
     }
 
     void Update()
@@ -97,6 +106,11 @@ public class UpgradeScreenToggle : MonoBehaviour
             if (creditsUI != null && creditsUI.alpha > 0)
             {
                 CloseCreditsUI();
+                anyClosed = true;
+            }
+            if (tutorialUI != null && tutorialUI.alpha > 0)
+            {
+                CloseTutorialUI();
                 anyClosed = true;
             }
 
@@ -191,6 +205,17 @@ public class UpgradeScreenToggle : MonoBehaviour
         if (creditsUI != null)
         {
             SetCanvasGroupState(creditsUI, false);
+        }
+    }
+
+    public void CloseTutorialUI()
+    {
+        if (tutorialUI != null)
+        {
+            SetCanvasGroupState(tutorialUI, false);
+
+            PlayerPrefs.SetInt("TutorialSeen", 1);
+            PlayerPrefs.Save();
         }
     }
 }

@@ -32,20 +32,6 @@ public class NodeConnector : MonoBehaviour
         return neighbors;
     }
 
-    // Placeholder unlock next tier method
-    //public void UnlockNextTier()
-    //{
-    //    foreach (var node in GetConnectedNodes())
-    //    {
-    //        if (node != null)
-    //        {
-    //            // Placeholder: you can expand with specific unlock logic later
-    //            //UnityEngine.Debug.Log($"[UnlockNextTier] Unlocking node at tier {node.tier}");
-    //            // node.Unlock(); // if you implement such a method
-    //        }
-    //    }
-    //}
-
     // Pulse spreader with level decay
     public void SpreadUpgradePulse(int strength)
     {

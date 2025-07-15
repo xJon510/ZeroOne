@@ -284,4 +284,51 @@ public class BasicUpgrade : MonoBehaviour
             }
         }
     }
+
+    public void RemoveUpgradeLevel(CoreStats coreStats)
+    {
+        if (currentLevel <= 0)
+        {
+            Debug.LogWarning($"[RemoveUpgradeLevel] {upgradeName} is already at Level 0.");
+            return;
+        }
+
+        currentLevel--;
+
+        float value = statGainPerLevel;
+        coreStats.AddStat(statToModify.ToString(), -value);
+
+        if (upgradeInfo != null)
+        {
+            upgradeInfo.currentLevel = currentLevel;
+
+            float rawCost = GetUpgradeCost(currentLevel);
+            float finalCost = rawCost;
+
+            if (upgradeBranch == BranchType.CPU)
+            {
+                float cpuDiscount = CoreStats.Instance.GetStat("CPU Discount");
+                if (cpuDiscount > 0f)
+                {
+                    finalCost -= rawCost * (cpuDiscount / 100);
+                }
+            }
+
+            upgradeInfo.upgradeCost = finalCost;
+            upgradeInfo.passiveEffect = statGainPerLevel * currentLevel; // total effect
+        }
+
+        if (currentLevel == 0)
+        {
+            if (upgradeAnimator != null)
+            {
+                upgradeAnimator.SetBool("UnlockedLevel1", false);
+            }
+        }
+
+        UpdateLvlText(currentLevel);
+
+        LogPrinter.Instance.PrintLog($"Downgraded {upgradeName} to Level {currentLevel}", upgradeBranch);
+        Debug.Log($"[RemoveUpgradeLevel] {upgradeName} downgraded to level {currentLevel}. New cost: {upgradeInfo.upgradeCost}");
+    }
 }
