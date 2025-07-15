@@ -15,32 +15,40 @@ public class ThreadFork : MonoBehaviour
         upgrade = GetComponent<BasicUpgrade>();
     }
 
-    void Update()
+    void OnEnable()
+    {
+        UpgradeTrackerManager.OnUpgradeRecorded += HandleUpgradeRecorded;
+    }
+
+    void OnDisable()
+    {
+        UpgradeTrackerManager.OnUpgradeRecorded -= HandleUpgradeRecorded;
+    }
+
+    private void HandleUpgradeRecorded(string upgradeName, int level, string pathType)
     {
         if (upgrade == null || upgrade.currentLevel < 1) return;
 
+        // Only recompute if relevant to path logic
+        Recalculate();
+    }
+
+    public void Recalculate()
+    {
         int level = upgrade.currentLevel;
 
-        // === Compute path count ===
         int basePaths = 0;
         foreach (BranchType branch in System.Enum.GetValues(typeof(BranchType)))
         {
             int branchPaths = CountPaths(branch);
-            //Debug.Log($"[ThreadFork] Branch {branch} Paths: {branchPaths}");
             basePaths += branchPaths;
         }
 
         int bonusPaths = GetMilestonePathBonus(basePaths, level);
         int totalPaths = basePaths + bonusPaths;
 
-        //Debug.Log($"[ThreadFork] Level: {level} | BasePaths: {basePaths} | BonusPaths: {bonusPaths} | TotalPaths: {totalPaths}");
-
-        // === Calculate BitRate boost ===
         float ratePerLevel = GetBitRatePerLevel(level);
-        //Debug.Log($"[ThreadFork] BitRate per Level: {ratePerLevel}%");
-
         float newPercentBitRate = totalPaths * ratePerLevel * level;
-        //Debug.Log($"[ThreadFork] New PercentBitRate: {newPercentBitRate}% | Last: {lastPercentBitRate}%");
 
         if (!Mathf.Approximately(newPercentBitRate, lastPercentBitRate))
         {

@@ -18,6 +18,11 @@ public class ThrottleDelay : MonoBehaviour
         if (coreStats == null || thisUpgrade == null || thisUpgrade.UpgradeLevel() < 1)
             return;
 
+        if (coreStats.GetStat("Throttle Delay") == 0f)
+        {
+            coreStats.AddStat("Throttle Delay", 0f, StatBranch.CPU);
+        }
+
         int level = thisUpgrade.UpgradeLevel();
         float idleTime = IdleTracker.Instance.IdleTime;
 
@@ -50,6 +55,11 @@ public class ThrottleDelay : MonoBehaviour
         {
             float delta = newBonus - lastAppliedBonus;
             coreStats.AddStat("PercentBitRate", delta);
+
+            float oldDisplay = coreStats.GetStat("Throttle Delay");
+            float displayDelta = newBonus - oldDisplay;
+            coreStats.AddStat("Throttle Delay", displayDelta, StatBranch.CPU);
+
             lastAppliedBonus = newBonus;
 
             //Debug.Log($"[ThrottleDelay] Applied delta: {delta:F2}% | Total: {newBonus:F2}% (Steps: {stepCount}, StepSize: {idleStep}s, MaxIdle: {maxIdle}s)");
@@ -62,6 +72,10 @@ public class ThrottleDelay : MonoBehaviour
         {
             coreStats.AddStat("PercentBitRate", -lastAppliedBonus);
             lastAppliedBonus = 0f;
+
+            float oldDisplay = coreStats.GetStat("Throttle Delay");
+            if (oldDisplay != 0f)
+                coreStats.AddStat("Throttle Delay", -oldDisplay, StatBranch.CPU);
 
             //Debug.Log($"[ThrottleDelay] Reset bonus to 0 due to activity.");
             LogPrinter.Instance?.PrintLog($"Throttle Delay Bonus Reset Due To Activity.", BranchType.CPU);

@@ -47,6 +47,7 @@ public class ThreadWeaver : MonoBehaviour
         {
             float delta = newBonus - lastBonus;
             CoreStats.Instance.AddStat("PercentBitRate", delta);
+            CoreStats.Instance.AddStat("Thread Weaver", delta, StatBranch.CPU);
             lastBonus = newBonus;
             //Debug.Log($"(ME) {delta}");
         }

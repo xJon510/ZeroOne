@@ -10,6 +10,7 @@ public class HeatSink : MonoBehaviour
     private float lastIdleMilestone = 0f;
 
     private float activeBonusAmount = 0f;
+    private float lastStaticValue = 0f;
 
     private void Start()
     {
@@ -25,9 +26,17 @@ public class HeatSink : MonoBehaviour
         float idleTime = IdleTracker.Instance.IdleTime;
         int level = thisUpgrade.UpgradeLevel();
 
-        // Milestone-based values
-        float bonusPerLevel = GetBonusPerLevel(level) * level;      // % per level
-        float buffDuration = GetBuffDuration(level);        // How long the buff lasts
+        float staticPotential = GetBonusPerLevel(level) * level;
+
+        // Always keep Heat Sink stat updated to static potential
+        if (!Mathf.Approximately(staticPotential, lastStaticValue))
+        {
+            float delta = staticPotential - lastStaticValue;
+            coreStats.AddStat("Heat Sink", delta, StatBranch.CPU);
+            lastStaticValue = staticPotential;
+        }
+
+        float buffDuration = GetBuffDuration(level);
 
         // Every 10s idle -> trigger 5s buff
         if (!isBuffActive && idleTime >= lastIdleMilestone + 10f)

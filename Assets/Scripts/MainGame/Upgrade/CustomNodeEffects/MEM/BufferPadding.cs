@@ -47,8 +47,8 @@ public class BufferPadding : MonoBehaviour
         // Remove the old value before adding the new one
         if (Mathf.Abs(totalOverflowPercent - lastAppliedAmount) > 0.001f)
         {
-            coreStats.AddStat("% Overflow", -lastAppliedAmount, StatBranch.MEM);
-            coreStats.AddStat("% Overflow", totalOverflowPercent, StatBranch.MEM);
+            coreStats.AddStat("Overflow", -lastAppliedAmount, StatBranch.MEM);
+            coreStats.AddStat("Overflow", totalOverflowPercent, StatBranch.MEM);
             lastAppliedAmount = totalOverflowPercent;
 
             // Debug.Log($"[BufferPadding] Applied {totalOverflowPercent}% overflow at level {level}");

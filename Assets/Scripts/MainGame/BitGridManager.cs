@@ -74,7 +74,7 @@ public class BitGridManager : MonoBehaviour
                 hasLoggedFull = true;
             }
 
-            float overflowPercent = CoreStats.Instance.GetStat("% Overflow") / 100f;
+            float overflowPercent = CoreStats.Instance.GetStat("Overflow") / 100f;
 
             if (overflowPercent > 0f)
             {

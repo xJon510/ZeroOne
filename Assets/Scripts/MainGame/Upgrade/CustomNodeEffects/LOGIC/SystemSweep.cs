@@ -13,6 +13,8 @@ public class SystemSweep : MonoBehaviour
     private float timeUntilNextSweep;
     private int sweepCount = 1;
 
+    private float lastSweepCooldown = 0f;
+
     private void Start()
     {
         coreStats = FindObjectOfType<CoreStats>();
@@ -54,6 +56,12 @@ public class SystemSweep : MonoBehaviour
             timeUntilNextSweep = sweepCooldown;
             OnTick();
         }
+
+        float displayCooldown = sweepCooldown;
+
+        // Store it in CoreStats as "Sweep Cooldown"
+        coreStats.AddStat("System Sweep", displayCooldown - lastSweepCooldown, StatBranch.LOGIC);
+        lastSweepCooldown = displayCooldown;
     }
 
     public void OnTick()

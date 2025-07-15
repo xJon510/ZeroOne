@@ -24,6 +24,13 @@ public class ByteInjector : MonoBehaviour
 
         int level = upgrade.UpgradeLevel();
 
+        float staticInjectAmount = GetBonusPerLevel(level) * level;
+        if (!Mathf.Approximately(coreStats.GetStat("Byte Injector"), staticInjectAmount))
+        {
+            float delta = staticInjectAmount - coreStats.GetStat("Byte Injector");
+            coreStats.AddStat("Byte Injector", delta, StatBranch.CPU);
+        }
+
         // Handle permanent bonus at level >= 100
         if (level >= 100)
         {

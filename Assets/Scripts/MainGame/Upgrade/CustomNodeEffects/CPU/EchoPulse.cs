@@ -43,5 +43,11 @@ public class EchoPulse : MonoBehaviour
             // Debug.Log($"[EchoPulse] Echo Pulse triggered! +{extraBits:F2} Bits.");
             LogPrinter.Instance?.PrintLog($"Echo Pulse Triggered! +{extraBits:F2} Bits.",BranchType.CPU);
         }
+
+        // Always update static stat for display
+        float displayChance = level * chancePerLevel;
+        float oldValue = CoreStats.Instance.GetStat("Echo Pulse");
+        float delta = displayChance - oldValue;
+        CoreStats.Instance.AddStat("Echo Pulse", delta, StatBranch.CPU);
     }
 }

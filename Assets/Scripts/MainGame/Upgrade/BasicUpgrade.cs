@@ -152,6 +152,12 @@ public class BasicUpgrade : MonoBehaviour
             LogPrinter.Instance.PrintLog($"Upgraded {upgradeName} to Level {currentLevel}", upgradeBranch);
         }
 
+        var threadFork = GetComponent<ThreadFork>();
+        if (threadFork != null)
+        {
+            threadFork.Recalculate();
+        }
+
         Debug.Log($"[BasicUpgrade] {upgradeName} upgraded to level {currentLevel}. Cost now: {upgradeInfo.upgradeCost}");
     }
 
@@ -217,6 +223,12 @@ public class BasicUpgrade : MonoBehaviour
                 }
             }
         }
+
+        var forkUpgrades = FindObjectsOfType<ThreadFork>();
+        foreach (var fork in forkUpgrades)
+        {
+            fork.Recalculate();
+        }
     }
 
     private void UnlockLogicNodes()
@@ -250,6 +262,12 @@ public class BasicUpgrade : MonoBehaviour
                 }
             }
         }
+
+        var threadFork = GetComponent<ThreadFork>();
+        if (threadFork != null)
+        {
+            threadFork.Recalculate();
+        }
     }
 
     private void UnlockMemNodes()
@@ -282,6 +300,12 @@ public class BasicUpgrade : MonoBehaviour
                     Debug.LogWarning($"[UnlockMEMNodes] Node or button missing for a neighbor of {upgradeName}");
                 }
             }
+        }
+
+        var threadFork = GetComponent<ThreadFork>();
+        if (threadFork != null)
+        {
+            threadFork.Recalculate();
         }
     }
 
@@ -327,6 +351,12 @@ public class BasicUpgrade : MonoBehaviour
         }
 
         UpdateLvlText(currentLevel);
+
+        var threadFork = GetComponent<ThreadFork>();
+        if (threadFork != null)
+        {
+            threadFork.Recalculate();
+        }
 
         LogPrinter.Instance.PrintLog($"Downgraded {upgradeName} to Level {currentLevel}", upgradeBranch);
         Debug.Log($"[RemoveUpgradeLevel] {upgradeName} downgraded to level {currentLevel}. New cost: {upgradeInfo.upgradeCost}");

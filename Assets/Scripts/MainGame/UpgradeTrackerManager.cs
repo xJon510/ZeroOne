@@ -6,6 +6,8 @@ public class UpgradeTrackerManager : MonoBehaviour
 {
     public static UpgradeTrackerManager Instance;
 
+    public static event System.Action<string, int, string> OnUpgradeRecorded;
+
     [System.Serializable]
     public class UpgradeRecord
     {
@@ -56,6 +58,8 @@ public class UpgradeTrackerManager : MonoBehaviour
         {
             trackedUpgrades.Add(new UpgradeRecord(upgradeName, level, pathType, component));
         }
+
+        OnUpgradeRecorded?.Invoke(upgradeName, level, pathType);
     }
 
     // Getters

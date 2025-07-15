@@ -31,6 +31,10 @@ public class CoreStatListUpdater : MonoBehaviour
     StatBranch.MEM
 };
 
+    private readonly HashSet<string> timeStats = new() { "System Sweep", "Sweep Cooldown" };
+    private readonly HashSet<string> percentStats = new() { "PercentBitRate", "Heat Sink", "CPU Discount", "Overflow", "Thread Weaver", "Throttle Delay", "Echo Pulse" };
+
+
     void Start()
     {
         // Clear any stale map
@@ -73,7 +77,14 @@ public class CoreStatListUpdater : MonoBehaviour
             foreach (var text in texts)
             {
                 if (text.gameObject.name.ToLower().Contains("value"))
-                    text.text = newValue.ToString("F2");
+                {
+                    if (timeStats.Contains(statName))
+                        text.text = $"{newValue:F2}s";
+                    else if (percentStats.Contains(statName))
+                        text.text = $"{newValue:F2}%";
+                    else
+                        text.text = newValue.ToString("F2");
+                }
             }
         }
         else
@@ -88,9 +99,18 @@ public class CoreStatListUpdater : MonoBehaviour
             foreach (var text in texts)
             {
                 if (text.gameObject.name.ToLower().Contains("category"))
+                {
                     text.text = statName;
+                }
                 else if (text.gameObject.name.ToLower().Contains("value"))
-                    text.text = newValue.ToString("F2");
+                {
+                    if (timeStats.Contains(statName))
+                        text.text = $"{newValue:F2}s";
+                    else if (percentStats.Contains(statName))
+                        text.text = $"{newValue:F2}%";
+                    else
+                        text.text = newValue.ToString("F2");
+                }
 
                 text.color = branchColor;
             }
