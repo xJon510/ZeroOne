@@ -182,6 +182,8 @@ public class BootManager : MonoBehaviour
 
     private List<string> bootQueue = new List<string>();
 
+    private Resolution native;
+
     private void Start()
     {
         // Check if we should skip the boot
@@ -196,10 +198,11 @@ public class BootManager : MonoBehaviour
             return;
         }
 
+        native = Screen.currentResolution;
+
         // Clear console
         consoleText.text = "";
         // Set borderless windowed at 960x540
-        Screen.SetResolution(960, 540, false);
         Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
         // Start the boot sequence
         StartCoroutine(BootSequence());
@@ -219,6 +222,8 @@ public class BootManager : MonoBehaviour
     {
         float elapsed = 0f;
         int normalLineCount = 0;
+
+        Screen.SetResolution(960, 540, false);
 
         GenerateBootQueue();
 
@@ -265,8 +270,9 @@ public class BootManager : MonoBehaviour
         }
 
         // Go fullscreen
-        Screen.fullScreen = true;
-        Bloom.SetActive(true);
+        int nativeW = Display.main.systemWidth;
+        int nativeH = Display.main.systemHeight;
+        Screen.SetResolution(nativeW, nativeH, FullScreenMode.FullScreenWindow); Bloom.SetActive(true);
         SetDefaultCursor();
 
         LogInitializer.InitializeAllLogs();
@@ -354,8 +360,9 @@ public class BootManager : MonoBehaviour
             ShowTutorialUI();
         }
 
-        Screen.fullScreen = true;
-        Bloom.SetActive(true);
+        int nativeW = Display.main.systemWidth;
+        int nativeH = Display.main.systemHeight;
+        Screen.SetResolution(nativeW, nativeH, FullScreenMode.FullScreenWindow); Bloom.SetActive(true);
         SetDefaultCursor();
 
         LogInitializer.InitializeAllLogs();
@@ -373,8 +380,9 @@ public class BootManager : MonoBehaviour
         titleScreenUI.interactable = true;
         titleScreenUI.blocksRaycasts = true;
 
-        Screen.fullScreen = true;
-        Bloom.SetActive(true);
+        int nativeW = Display.main.systemWidth;
+        int nativeH = Display.main.systemHeight;
+        Screen.SetResolution(nativeW, nativeH, FullScreenMode.FullScreenWindow); Bloom.SetActive(true);
         SetDefaultCursor();
 
         LogInitializer.InitializeAllLogs();
