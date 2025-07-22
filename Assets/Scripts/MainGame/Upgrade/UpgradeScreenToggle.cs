@@ -218,4 +218,14 @@ public class UpgradeScreenToggle : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
+
+    public void CloseAllUIPanels()
+    {
+        if (upgradeUI != null) SetCanvasGroupState(upgradeUI, false);
+        if (audioUI != null) SetCanvasGroupState(audioUI, false);
+        if (exitUI != null) SetCanvasGroupState(exitUI, false);
+        if (achievementUI != null) SetCanvasGroupState(achievementUI, false);
+        if (creditsUI != null) SetCanvasGroupState(creditsUI, false);
+        if (tutorialUI != null) SetCanvasGroupState(tutorialUI, false);
+    }
 }

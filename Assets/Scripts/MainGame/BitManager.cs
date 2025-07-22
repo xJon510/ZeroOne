@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BitManager : MonoBehaviour
 {
@@ -26,6 +27,14 @@ public class BitManager : MonoBehaviour
     public static event Action OnGameTick;
 
     public float overflowBits;
+
+    [Header("Win UI")]
+    public CanvasGroup winGameUIPanel;
+    public Button continueButton;
+    public Button returnToTitleButton;
+    public TMP_Text DemoRunTimeText;
+    public float demoWinCondition = 8388608f;
+    private bool demoEnded = false;
 
     private void Start()
     {
@@ -55,6 +64,11 @@ public class BitManager : MonoBehaviour
             Tick();
         }
 
+        if (!demoEnded && currentBits + overflowBits >= (ulong)demoWinCondition)
+        {
+            TriggerDemoWin();
+        }
+
         UpdateRunTimeText();
     }
 
@@ -81,9 +95,12 @@ public class BitManager : MonoBehaviour
     {
         if (runTimeText != null)
         {
-            int minutes = Mathf.FloorToInt(runTime / 60f);
-            int seconds = Mathf.FloorToInt(runTime % 60f);
-            runTimeText.text = $"{minutes:00}:{seconds:00}";
+            int totalSeconds = Mathf.FloorToInt(runTime);
+            int hours = totalSeconds / 3600;
+            int minutes = (totalSeconds % 3600) / 60;
+            int seconds = totalSeconds % 60;
+
+            runTimeText.text = $"{hours:00}:{minutes:00}:{seconds:00}";
         }
     }
 
@@ -150,5 +167,46 @@ public class BitManager : MonoBehaviour
     public float GetOverflowBits()
     {
         return overflowBits;
+    }
+
+    void SetCanvasGroupState(CanvasGroup cg, bool visible)
+    {
+        cg.alpha = visible ? 1 : 0;
+        cg.interactable = visible;
+        cg.blocksRaycasts = visible;
+    }
+
+    public void TriggerDemoWin()
+    {
+        demoEnded = true;
+
+        UpgradeScreenToggle toggle = FindObjectOfType<UpgradeScreenToggle>();
+        if (toggle != null)
+            toggle.CloseAllUIPanels();
+
+        int totalSeconds = Mathf.FloorToInt(runTime);
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        if (hours > 0)
+            DemoRunTimeText.text = $"In {hours:00}:{minutes:00}:{seconds:00} Time";
+        else
+            DemoRunTimeText.text = $"In {minutes:00}:{seconds:00} Time";
+
+        if (winGameUIPanel != null)
+            SetCanvasGroupState(winGameUIPanel, true);
+
+        if (continueButton != null)
+            continueButton.onClick.AddListener(() =>
+            {
+                SetCanvasGroupState(winGameUIPanel, false);
+            });
+
+        if (returnToTitleButton != null)
+            returnToTitleButton.onClick.AddListener(() =>
+            {
+                SaveManager.Instance?.SendMessage("ExitToTitleScreen");
+            });
     }
 }
