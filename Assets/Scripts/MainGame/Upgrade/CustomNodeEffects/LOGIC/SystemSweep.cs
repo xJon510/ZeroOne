@@ -60,8 +60,11 @@ public class SystemSweep : MonoBehaviour
         float displayCooldown = sweepCooldown;
 
         // Store it in CoreStats as "Sweep Cooldown"
-        coreStats.AddStat("System Sweep", displayCooldown - lastSweepCooldown, StatBranch.LOGIC);
-        lastSweepCooldown = displayCooldown;
+        if (!Mathf.Approximately(displayCooldown, lastSweepCooldown))
+        {
+            coreStats.AddStat("System Sweep", displayCooldown - lastSweepCooldown, StatBranch.LOGIC);
+            lastSweepCooldown = displayCooldown;
+        }
     }
 
     public void OnTick()
@@ -129,9 +132,15 @@ public class SystemSweep : MonoBehaviour
 
             if (current < max)
             {
-                coreStats.AddStat("SweptCache", sweptAmount, StatBranch.LOGIC);
-                Debug.Log($"[SystemSweep] +{sweptAmount} SweptCache => {current + sweptAmount} / {max}");
-                LogPrinter.Instance.PrintLog($"[SweptCache] +{sweptAmount} -> {current + sweptAmount} / {max}", BranchType.LOGIC);
+                float spaceLeft = max - current;
+                float clampedSweep = Mathf.Min(sweptAmount, spaceLeft);
+
+                coreStats.AddStat("SweptCache", clampedSweep, StatBranch.LOGIC);
+
+                float newTotal = current + clampedSweep;
+
+                Debug.Log($"[SystemSweep] +{clampedSweep} SweptCache => {newTotal} / {max}");
+                LogPrinter.Instance.PrintLog($"[SweptCache] +{clampedSweep} -> {newTotal} / {max}", BranchType.LOGIC);
             }
         }
     }

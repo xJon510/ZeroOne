@@ -343,6 +343,8 @@ public class BootManager : MonoBehaviour
     {
         consoleText.text += "\n\n[SYS] Boot sequence manually skipped.\n";
 
+        ForceScrollToBottom();
+
         bootSFX?.PlayBootComplete();
 
         yield return new WaitForSeconds(1f); // slight delay for clarity

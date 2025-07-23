@@ -32,7 +32,7 @@ public class CoreStatListUpdater : MonoBehaviour
 };
 
     private readonly HashSet<string> timeStats = new() { "System Sweep", "Sweep Cooldown" };
-    private readonly HashSet<string> percentStats = new() { "PercentBitRate", "Heat Sink", "CPU Discount", "Overflow", "Thread Weaver", "Throttle Delay", "Echo Pulse" };
+    private readonly HashSet<string> percentStats = new() { "PercentBitRate", "Heat Sink", "CPU Discount", "Overflow", "Thread Weaver", "Throttle Delay", "Echo Pulse", "Stack Bonus", "Static Surge" };
 
 
     void Start()
